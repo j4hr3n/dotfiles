@@ -28,19 +28,6 @@
       relink: true
     # Brew
     ~/Brewfile: Brewfile
-    # GPG
-    ~/.gnupg/gpg-agent.conf: gnupg/gpg-agent.conf
-    ~/.gnupg/gpg.confg: gnupg/gpg.conf
-    # Karabiner
-    ~/.config/karabiner/karabiner.json:
-      force: true
-      path: karabiner/karabiner.json
-    ~/.config/karabiner/assets/complex_modifications:
-      force: true
-      path: karabiner/modifications
-    ~/.hammerspoon:
-      if: "[ `uname` = Darwin ]"
-      path: hammerspoon
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
@@ -55,8 +42,4 @@
       description: Updating brew dependencies - part 2
       stdout: true
     - command: open -a "Raycast"
-      stdout: false
-    - command: open -a "Hammerspoon"
-      stdout: false
-    - command: open -a "Karabiner-Elements"
       stdout: false

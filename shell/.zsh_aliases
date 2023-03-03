@@ -1,49 +1,7 @@
-alias code="code-insiders"
-
 # Git
 alias g="git"
 
-# Docker
-alias d="docker"
-alias dc="docker-compose"
-alias dce="docker-compose exec"
-alias dcea="docker-compose exec app"
-dceas() {
-    docker-compose exec app su app -c "$*"
-}
-
-# Kubectx
-alias kx="kubectx"
-
-# Kubectl
-alias k="kubectl"
-alias kl="kubectl logs"
-alias kg="kubectl get"
-alias kgp="kubectl get pods --selector='!e2e-test-name'"
-alias kgd="kubectl get deployments"
-alias kgi="kubectl get ingress"
-alias kgs="kubectl get services"
-alias kgss="kubectl get secrets"
-alias kgcm="kubectl get configmaps"
-alias kgns="kubectl get namespaces"
-
-alias kd="kubectl describe"
-alias kdp="kubectl describe pods"
-alias kdi="kubectl describe ingress"
-alias kdd="kubectl describe deployments"
-alias kdcj="kubectl describe cronjobs"
-alias kdcm="kubectl describe configmaps"
-
-alias kpf="kubectl port-forward"
-
 alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
-
-alias kafka-topics=~/Ruter/kafka_2.7.0/bin/kafka-topics.sh
-
-alias sso-login="aws sso login --profile sso-dev-eks"
-alias sl="sso-login"
-
-alias idea="open -na 'IntelliJ IDEA.app'"
 
 # Detect which `ls` flavor is in use
 if ls --color >/dev/null 2>&1; then # GNU `ls`
@@ -56,12 +14,8 @@ alias ls='ls -lhF -G'
 alias lsa='ls -A'
 alias lsd="ls ${colorflag} | /usr/bin/grep --color=never '^d'"
 alias lsda="lsa | /usr/bin/grep --color=never '^d'"
-
 alias grep='grep --color=auto -i'
-
-alias clear="clear && printf '\e[3J'"
-
-alias vim="nvim"
+alias c="clear && printf '\e[3J'"
 alias copy="xclip -selection clipboard"
 alias paste="xclip -o -selection clipboard"
 
@@ -76,12 +30,7 @@ alias ls='ls -lhF ${colorflag}'
 alias lsa='ls -A'
 alias lsd="ls ${colorflag} | /usr/bin/grep --color=never '^d'"
 alias lsda="lsa | /usr/bin/grep --color=never '^d'"
-
 alias grep='grep --color=auto -n -i'
-
-alias clear="tput reset"
-
 alias df="df -h"
 alias du="du -h"
-
 alias simulator="open -a /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"

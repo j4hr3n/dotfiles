@@ -13,16 +13,9 @@ fi
 # Path to your dotfiles.
 export DOTFILES=$HOME/.dotfiles
 
-# Golang setup
-export GOPATH=$HOME/go
-export GOROOT="$(brew --prefix golang)/libexec"
-
 #############
 # Confluent #
 #############
-
-export CONFLUENT_HOME=~/workspace/kafka/confluent-7.1.1
-export PATH=$CONFLUENT_HOME/bin:$PATH
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
