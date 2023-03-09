@@ -18,7 +18,6 @@ brew "bash"
 brew "bash-completion@2"
 
 # Productivity tools
-brew "awscli"
 brew "fx"
 brew "fzf"
 brew "git"
@@ -34,6 +33,9 @@ brew "fnm"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 
+# VS code
+brew install --cask vscodium
+
 # set arguments for all 'brew install --cask' commands
 cask_args appdir: "~/Applications", require_sha: true
 
@@ -42,7 +44,6 @@ cask "confluent-cli"
 cask "firefox-developer-edition"
 cask "figma"
 cask "git-credential-manager-core"
-cask "hammerspoon"
 cask "intellij-idea"
 cask "karabiner-elements"
 cask "kitty"
@@ -50,5 +51,7 @@ cask "notion"
 cask "raycast"
 cask "slack"
 cask "spotify"
-cask "visual-studio-code-insiders"
-cask "visualvm"
+
+# Mac App Store
+mas "Magnet", id: 441258766
+mas "Meeter", id: 1510445899
