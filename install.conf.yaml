@@ -7,8 +7,7 @@
 - link:
     # Terminal stuff
     ~/.zshrc: shell/.zshrc
-    ~/.zsh_aliases: .zsh_aliases
-    ~/.zsh_functions: shell/.zsh_functions
+    ~/.zsh_aliases: shell/.zsh_aliases
     # Brew
     ~/Brewfile: Brewfile
 
