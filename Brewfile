@@ -48,6 +48,7 @@ cask "visual-studio-code"
 cask "bettertouchtool"
 cask "iterm2"
 cask "discord"
+cask "1password"
 
 # Mac App Store
 mas "Magnet", id: 441258766
