@@ -5,33 +5,15 @@
       relink: true
 
 - link:
-    # Git
-    ~/.gitconfig: git/.gitconfig
-    ~/.gitconfig-job: git/.gitconfig-job
-    ~/.gitconfig-private: git/.gitconfig-private
-    ~/.gitignore_global: git/.gitignore_global
     # Terminal stuff
-    ~/.bash_profile: bash_profile
-    ~/.bashrc: bashrc
-    ~/.config/kitty: kitty
-    ~/.zsh_aliases: shell/.zsh_aliases
-    ~/.zsh_functions: shell/.zsh_functions
-    ~/.zsh_envs: shell/.zsh_envs
     ~/.zshrc: shell/.zshrc
-    ~/.antigenrc: shell/.antigenrc
-    ~/.p10k.zsh: shell/.p10k.zsh
-    # zsh completions
-    ~/.oh-my-zsh/completions/:
-      create: true
-      glob: true
-      path: shell/completions/*
-      relink: true
+    ~/.zsh_aliases: .zsh_aliases
+    ~/.zsh_functions: shell/.zsh_functions
     # Brew
     ~/Brewfile: Brewfile
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    # - ["vim +PlugUpdate +PlugClean! +qa", Installing and updating plugins]
     - command: brew bundle install
       description: Updating brew dependencies
       stdout: true
@@ -41,5 +23,3 @@
     - command: brew update && brew upgrade
       description: Updating brew dependencies - part 2
       stdout: true
-    - command: open -a "Raycast"
-      stdout: false

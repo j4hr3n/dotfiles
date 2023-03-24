@@ -24,34 +24,31 @@ brew "git"
 brew "jq"
 brew "mas"
 brew "yq"
+brew "lolcat"
 
 # Node
 brew "fnm"
 
 # Shell tools
-# brew "zsh"
+brew "zsh"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
 
-# VS code
-brew install --cask vscodium
-
-# set arguments for all 'brew install --cask' commands
-cask_args appdir: "~/Applications", require_sha: true
+# Github CLI
+brew "gh"
 
 # Casks
-cask "confluent-cli"
-cask "firefox-developer-edition"
 cask "figma"
-cask "git-credential-manager-core"
-cask "intellij-idea"
-cask "karabiner-elements"
-cask "kitty"
 cask "notion"
 cask "raycast"
 cask "slack"
 cask "spotify"
+cask "brave-browser"
+cask "visual-studio-code"
+cask "bettertouchtool"
+cask "iterm2"
 
 # Mac App Store
 mas "Magnet", id: 441258766
 mas "Meeter", id: 1510445899
+mas "Vimari", id: 1480933944
