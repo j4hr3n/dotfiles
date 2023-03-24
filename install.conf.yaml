@@ -8,6 +8,7 @@
     # Terminal stuff
     ~/.zshrc: shell/.zshrc
     ~/.zsh_aliases: shell/.zsh_aliases
+    ~/.vimrc: shell/.vimrc
     # Brew
     ~/Brewfile: Brewfile
 
