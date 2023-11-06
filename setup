@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+set -e
+
+unameOut=$(uname -a)
+case "${unameOut}" in
+*Microsoft*) OS="WSL" ;; #wls must be first since it will have Linux in the name too
+*microsoft*) OS="WSL2" ;;
+Linux*) OS="Linux" ;;
+Darwin*) OS="Mac" ;;
+CYGWIN*) OS="Cygwin" ;;
+MINGW*) OS="Windows" ;;
+*Msys) OS="Windows" ;;
+*) OS="UNKNOWN:${unameOut}" ;;
+esac
+
+if [[ ${OS} == "Mac" ]] && sysctl -n machdep.cpu.brand_string | grep -q 'Apple M'; then
+    #Check if its an apple chip. This check should work even if the current processes is running under x86 emulation (e.g Rosetta).
+    OS="MacM"
+fi
+
+if [[ ${OS} == "Windows" ]]; then
+    echo "To run the setup guide in windows, use the .profiles/windows/setup.ps1 instead"
+    exit 1
+fi
+
+echo "Running setup for $OS ⚒️"
+
+if [[ ${OS} == "MacM" ]] && ! xcode-select --print-path &>/dev/null; then
+
+    # Prompt user to install the XCode Command Line Tools
+    xcode-select --install &>/dev/null
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    # Wait until the XCode Command Line Tools are installed
+    until xcode-select --print-path &>/dev/null; do
+        sleep 5
+    done
+
+    print_result $? 'Install XCode Command Line Tools'
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    # Point the `xcode-select` developer directory to
+    # the appropriate directory from within `Xcode.app`
+    # https://github.com/alrra/dotfiles/issues/13
+
+    sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+    print_result $? 'Make "xcode-select" developer directory point to Xcode'
+
+    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    # Prompt user to agree to the terms of the Xcode license
+    # https://github.com/alrra/dotfiles/issues/10
+
+    sudo xcodebuild -license
+    print_result $? 'Agree with the XCode Command Line Tools licence'
+fi
+
+if [[ ${OS} == "WSL2" ]]; then
+    sudo apt-get update && sudo apt-get install build-essential procps curl file git
+fi
+
+if test ! $(which brew); then
+    echo "Installing homebrew"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+if [[ ${OS} == "MacM" ]] && ! $(command -v brew &>/dev/null); then
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >>$HOME/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    source $HOME/.zprofile
+fi
+
+if [[ ${OS} == "WSL2" ]] && ! $(command -v brew &>/dev/null); then
+    # Install homebrew
+    (
+        echo
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"'
+    ) >>/home/$USER/.profile
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    source $HOME/.profile
+fi
+
+mkdir -p ~/.gnupg # Create the gpg directory before running the installer
+
+[ -d ~/dotfiles ] || git clone https://github.com/j4hr3n/dotfiles.git ~/dotfiles
+[ -d ~/dotfiles ] && (cd ~/dotfiles && git submodule update --init --recursive)
+
+echo "Finished setting up your ${OS} environment 🎂"
