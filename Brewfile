@@ -1,7 +1,6 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-versions"
-tap "homebrew/cask-drivers"
 tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/cask-fonts"
@@ -52,5 +51,4 @@ cask "cursor"
 
 # Mac App Store
 mas "Magnet", id: 441258766
-mas "Meeter", id: 1510445899
 mas "Vimari", id: 1480933944
