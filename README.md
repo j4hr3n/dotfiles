@@ -31,8 +31,8 @@ export MSYS=winsymlinks:nativestrict
 
 ```zsh
 # If you have curl installed ########################################
-curl -Ls https://raw.github.com/j4hr3n/dotfiles/main/setup | bash
+curl -Ls https://raw.githubusercontent.com/j4hr3n/dotfiles/main/setup | bash
 
 # If you have wget installed ########################################
-wget -q -O - https://raw.github.com/j4hr3n/dotfiles/main/setup | bash
+wget -q -O - https://raw.githubusercontent.com/j4hr3n/dotfiles/main/setup | bash
 ```
