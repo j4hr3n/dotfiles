@@ -42,9 +42,6 @@ printf '
 printf 'Greetings Christoffer, welcome back!' | lolcat
 echo
 
-# set up fnm
-eval "$(fnm env --use-on-cd)"
-
 # Load brew on macOS
 if [[ "$OSTYPE" =~ ^darwin ]]; then
     export PATH="/opt/homebrew/sbin:$PATH"
@@ -55,3 +52,7 @@ if [ -f '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/path
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# fnm
+export PATH="/Users/christoffer.jahren@schibsted.com/Library/Application Support/fnm:$PATH"
+eval "$(fnm env)"
