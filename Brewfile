@@ -1,7 +1,5 @@
 tap "homebrew/bundle"
-tap "homebrew/cask"
 tap "homebrew/cask-versions"
-tap "homebrew/core"
 tap "homebrew/services"
 tap "homebrew/cask-fonts"
 tap "buo/cask-upgrade"
@@ -48,6 +46,7 @@ cask "iterm2"
 cask "discord"
 cask "1password"
 cask "cursor"
+cask "appcleaner"
 
 # Mac App Store
 mas "Magnet", id: 441258766

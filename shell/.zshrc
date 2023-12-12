@@ -47,12 +47,3 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
     export PATH="/opt/homebrew/sbin:$PATH"
     eval $(/opt/homebrew/bin/brew shellenv)
 fi
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/christoffer.jahren@schibsted.com/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-# fnm
-export PATH="/Users/christoffer.jahren@schibsted.com/Library/Application Support/fnm:$PATH"
-eval "$(fnm env)"
