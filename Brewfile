@@ -47,6 +47,7 @@ cask "discord"
 cask "1password"
 cask "cursor"
 cask "appcleaner"
+cask "google-cloud-sdk"
 
 # Mac App Store
 mas "Magnet", id: 441258766
