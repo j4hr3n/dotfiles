@@ -41,14 +41,11 @@ cask "raycast"
 cask "slack"
 cask "spotify"
 cask "arc"
-cask "bettertouchtool"
-cask "iterm2"
-cask "discord"
+cask "ghostty"
 cask "1password"
 cask "cursor"
 cask "appcleaner"
 cask "google-cloud-sdk"
 
 # Mac App Store
-mas "Magnet", id: 441258766
 mas "Vimari", id: 1480933944
