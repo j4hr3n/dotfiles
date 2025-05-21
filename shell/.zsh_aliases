@@ -1,3 +1,7 @@
 # Shorthands
 alias pn="pnpm"
 alias c="clear"
+
+
+alias vizsh="vim ~/.zshrc"
+alias szsh="source ~/.zshrc"

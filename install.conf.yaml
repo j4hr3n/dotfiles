@@ -11,6 +11,8 @@
     ~/.vimrc: shell/.vimrc
     # Brew
     ~/Brewfile: Brewfile
+    # Ghostty
+    ~/Library/Application Support/com.mitchellh.ghostty/config: configs/ghostty/config
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
