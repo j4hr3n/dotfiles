@@ -46,6 +46,3 @@ cask "1password"
 cask "cursor"
 cask "appcleaner"
 cask "google-cloud-sdk"
-
-# Mac App Store
-mas "Vimari", id: 1480933944
