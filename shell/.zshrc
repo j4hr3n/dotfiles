@@ -47,3 +47,5 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
     export PATH="/opt/homebrew/sbin:$PATH"
     eval $(/opt/homebrew/bin/brew shellenv)
 fi
+
+eval "$(fnm env --use-on-cd --shell zsh)"
