@@ -20,7 +20,7 @@ SAVEHIST=100000
 setopt appendhistory
 
 # set up zsh plugins
-plugins=(git zsh-you-should-use)
+plugins=(git)
 
 # start oh-my-zsh
 source $ZSH/oh-my-zsh.sh
