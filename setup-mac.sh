@@ -227,6 +227,16 @@ create_symlink "~/.vimrc" "shell/.vimrc"
 create_symlink "~/Brewfile" "Brewfile"
 create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "configs/ghostty/config"
 
+# Claude Code
+create_symlink "~/.claude/CLAUDE.md" "configs/claude-code/CLAUDE.md"
+create_symlink "~/.claude/SKILL.md" "configs/claude-code/SKILL.md"
+create_symlink "~/.claude/settings.json" "configs/claude-code/settings.json"
+create_symlink "~/.claude/statusline-command.sh" "configs/claude-code/statusline-command.sh"
+create_symlink "~/.claude/skills/solve/SKILL.md" "configs/claude-code/skills/solve/SKILL.md"
+create_symlink "~/.claude/skills/issue/SKILL.md" "configs/claude-code/skills/issue/SKILL.md"
+create_symlink "~/.claude/skills/review/SKILL.md" "configs/claude-code/skills/review/SKILL.md"
+create_symlink "~/.claude/skills/retro/SKILL.md" "configs/claude-code/skills/retro/SKILL.md"
+
 # Install Homebrew packages and casks
 print_info "Installing Homebrew packages and casks..."
 brew bundle install
