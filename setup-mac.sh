@@ -236,6 +236,7 @@ create_symlink "~/.claude/skills/solve/SKILL.md" "configs/claude-code/skills/sol
 create_symlink "~/.claude/skills/issue/SKILL.md" "configs/claude-code/skills/issue/SKILL.md"
 create_symlink "~/.claude/skills/review/SKILL.md" "configs/claude-code/skills/review/SKILL.md"
 create_symlink "~/.claude/skills/retro/SKILL.md" "configs/claude-code/skills/retro/SKILL.md"
+create_symlink "~/.claude/skills/swarm/SKILL.md" "configs/claude-code/skills/swarm/SKILL.md"
 
 # Install Homebrew packages and casks
 print_info "Installing Homebrew packages and casks..."
