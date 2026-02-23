@@ -49,3 +49,12 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
 fi
 
 eval "$(fnm env --use-on-cd --shell zsh)"
+
+. "$HOME/.local/bin/env"
+
+# bun completions
+[ -s "/Users/christofferjahren/.bun/_bun" ] && source "/Users/christofferjahren/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
