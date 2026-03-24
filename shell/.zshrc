@@ -2,7 +2,7 @@
 export ZSH=$HOME/.oh-my-zsh
 
 # Path to your dotfiles.
-export DOTFILES=$HOME/.dotfiles
+export DOTFILES=$HOME/dev/dotfiles
 
 # Theme
 ZSH_THEME="robbyrussell"
@@ -11,7 +11,7 @@ ZSH_THEME="robbyrussell"
 [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
 
 # zsh completions
-fpath=(path/to/zsh-completions/src $fpath)
+fpath=(/opt/homebrew/share/zsh-completions $fpath)
 
 # Enable history
 HISTFILE=~/.zsh_history
@@ -24,6 +24,14 @@ plugins=(git)
 
 # start oh-my-zsh
 source $ZSH/oh-my-zsh.sh
+
+# zsh-syntax-highlighting (must be sourced after oh-my-zsh)
+[ -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && \
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# zsh-autosuggestions
+[ -f /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh ] && \
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 printf '
          _                  _     

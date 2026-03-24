@@ -12,6 +12,7 @@ brew "fnm"
 # Shell tools
 brew "zsh"
 brew "zsh-completions"
+brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
 # Github CLI
