@@ -4,21 +4,15 @@
 - Never add `Co-Authored-By` or any Claude/Anthropic attribution to commit messages
 - Never mention Claude in PR descriptions, titles, or issue comments
 
-## Learnings workflow
+## Memory & Persistence
 
-After completing a non-trivial task, write key learnings to the project memory file:
-
-- **Path**: `~/.claude/projects/<project>/memory/MEMORY.md` (where `<project>` matches the project identifier Claude Code uses for the current working directory).
-- Create the file and any parent directories if they don't exist.
-- Each entry should have a date header (`## YYYY-MM-DD`) and concise bullet points.
-- Record things like: build quirks, architecture patterns, debugging insights, gotchas, important commands, non-obvious conventions.
-- Keep entries actionable and brief — future you should be able to scan them quickly.
-- Don't duplicate entries that already exist in the file.
+- Do **not** write project-specific memory files (no `MEMORY.md`, no memory directories).
+- If a pattern, convention, or learning needs to persist, propose a skill update instead.
 
 ## Permissions
 
-- During feature implementation, work autonomously — don't ask for approval on file edits, writes, or tool calls. This includes writing to `.claude/` (plans, memory).
-- Reading files outside the current working directory (e.g., `~/.claude/`, skill files, memory files) does not require approval.
+- During feature implementation, work autonomously — don't ask for approval on file edits, writes, or tool calls. This includes writing to `.claude/` (plans, skills).
+- Reading files outside the current working directory (e.g., `~/.claude/`, skill files) does not require approval.
 
 ## Tool preferences
 
