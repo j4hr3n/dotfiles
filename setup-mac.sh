@@ -230,6 +230,7 @@ create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "con
 # Claude Code config
 print_info "Setting up Claude Code config..."
 mkdir -p "$HOME/.claude/plugins"
+create_symlink "~/.claude/CLAUDE.md" "claude/CLAUDE.md"
 create_symlink "~/.claude/settings.json" "claude/settings.json"
 create_symlink "~/.claude/skills" "claude/skills"
 create_symlink "~/.claude/plugins/installed_plugins.json" "claude/plugins/installed_plugins.json"
