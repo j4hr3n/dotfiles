@@ -8,3 +8,4 @@ alias szsh="source ~/.zshrc"
 
 # Dotfiles management
 alias dotfiles-doctor="bash ~/dev/dotfiles/scripts/dotfiles-doctor.sh"
+alias dotfiles-update="bash ~/dev/dotfiles/scripts/dotfiles-update.sh"
