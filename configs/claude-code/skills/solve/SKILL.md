@@ -40,7 +40,6 @@ For each issue:
   - Backend/agent logic only → **agent-platform**
   - Both (e.g., new API endpoint + UI that calls it) → **both**
 - Use Explore agents (via the Task tool with `subagent_type=Explore`) to understand the relevant parts of the codebase. When classified as **both**, explore both repos.
-- Consult project memory (`~/.claude/projects/*/memory/MEMORY.md`) for relevant past learnings.
 - Identify key files, patterns, dependencies, and constraints.
 
 ---
@@ -157,17 +156,13 @@ For issues that span both repos, use an **agent team** instead of subagents:
 
 After implementation is complete:
 
-1. **Save learnings** to project memory at `~/.claude/projects/<project>/memory/MEMORY.md`:
-   - Any build quirks, architecture patterns, gotchas, or debugging insights discovered.
-   - Keep entries concise with a date header.
-
-2. **Report to the user:**
+1. **Report to the user:**
    - Branch name(s)
    - Commit list
    - Test results summary
    - Any issues encountered
 
-3. **Suggest running `/retro`** to review whether skills, commands, or config need updating based on this session.
+2. **Suggest running `/retro`** to review whether skills, commands, or config need updating based on this session.
 
 **STOP HERE.** Do NOT push branches or create PRs automatically. The user will verify the implementation manually and decide when to create the PR.
 

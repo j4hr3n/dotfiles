@@ -2,7 +2,7 @@
 
 ## Trigger
 
-The user runs `/retro` (no arguments). Reviews the most recent work in the current session and proposes improvements to skills, config, and memory.
+The user runs `/retro` (no arguments). Reviews the most recent work in the current session and proposes improvements to skills and config.
 
 ## Inputs
 
@@ -38,9 +38,7 @@ Collect information about the most recent work. Not all sources will be relevant
 
 3. **Plan files:** Check `.claude/plans/` in the project root for any plan files from the session.
 
-4. **Project memory:** Read `~/.claude/projects/<project>/memory/MEMORY.md` for existing learnings.
-
-5. **Current skills and config:**
+4. **Current skills and config:**
    - Scan `~/.claude/skills/*/SKILL.md` for all active skills.
    - Read `~/.claude/CLAUDE.md` (global) and any project-level `CLAUDE.md`.
 
@@ -52,7 +50,6 @@ For each area, assess what worked and what caused friction during the recent wor
 
 - **Skills** (`~/.claude/skills/*/SKILL.md`) — Did the workflow instructions match reality? Were steps missing, wrong, unnecessary, or in the wrong order?
 - **CLAUDE.md** (global + project) — Are there new conventions, patterns, or constraints that should be documented? Are existing instructions outdated?
-- **Project memory** — Are there learnings missing from `MEMORY.md` that would help future work? Are existing entries still accurate?
 - **Settings & config** — Did permissions, env vars, model settings, or sandbox configuration cause friction?
 
 ---
@@ -80,7 +77,6 @@ Edit the relevant files based on user approval:
 
 - Skill files (`~/.claude/skills/*/SKILL.md`)
 - Config files (`CLAUDE.md`, global or project-level)
-- Memory files (`MEMORY.md`)
 - Any other config files the user approves
 
 Commit changes if they are non-trivial, using branch prefix `chore/` (e.g., `chore/retro-update-solve-skill`).
