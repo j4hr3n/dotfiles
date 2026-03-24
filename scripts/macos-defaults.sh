@@ -32,8 +32,8 @@ defaults write NSGlobalDomain InitialKeyRepeat -int 15
 
 # Screenshots
 echo -e "${YELLOW}Configuring Screenshots...${NC}"
-mkdir -p "$HOME/Screenshots"
-defaults write com.apple.screencapture location -string "$HOME/Screenshots"
+mkdir -p "$HOME/screengrabs"
+defaults write com.apple.screencapture location -string "$HOME/screengrabs"
 
 # Trackpad
 echo -e "${YELLOW}Configuring Trackpad...${NC}"
