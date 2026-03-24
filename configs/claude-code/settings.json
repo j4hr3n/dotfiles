@@ -54,13 +54,13 @@
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
     "github@claude-plugins-official": false,
     "typescript-lsp@claude-plugins-official": true,
     "playwright@claude-plugins-official": true,
     "figma@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "slack@claude-plugins-official": true,
+    "slack@claude-plugins-official": false,
     "skill-creator@claude-plugins-official": true,
     "code-simplifier@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true
