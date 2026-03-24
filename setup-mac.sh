@@ -254,6 +254,16 @@ print_info "Updating Homebrew packages..."
 brew update && brew upgrade
 print_result $? "Homebrew packages updated"
 
+# Step 8: Apply macOS defaults (optional)
+echo ""
+read -p "Apply recommended macOS defaults? (y/n) " -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    bash "$DOTFILES_DIR/scripts/macos-defaults.sh"
+else
+    print_info "Skipping macOS defaults. Run manually: scripts/macos-defaults.sh"
+fi
+
 echo ""
 echo "=========================================="
 echo -e "${GREEN}Setup completed successfully!${NC}"
