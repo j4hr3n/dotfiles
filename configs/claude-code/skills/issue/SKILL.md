@@ -16,7 +16,7 @@ You are executing the `/issue` skill. Follow these steps strictly in order.
 
 - Parse the description from `$ARGUMENTS`.
 - Use Explore agents (via the Task tool with `subagent_type=Explore`) to find relevant files, patterns, and context in the codebase that relate to the issue.
-- Consult project memory (`~/.claude/projects/*/memory/MEMORY.md`) for relevant past learnings.
+
 
 ### Step 2: Draft the issue
 
