@@ -11,5 +11,18 @@
     "superpowers@claude-plugins-official": true
   },
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dev/dotfiles/scripts/sync-claude-config.sh"
+          }
+        ]
+      }
+    ]
+  }
 }
