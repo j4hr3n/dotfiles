@@ -1,3 +1,4 @@
 Brewfile.lock.json
 logs/**
 git/**
+claude/settings.local.json

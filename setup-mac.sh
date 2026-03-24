@@ -227,6 +227,13 @@ create_symlink "~/.vimrc" "shell/.vimrc"
 create_symlink "~/Brewfile" "Brewfile"
 create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "configs/ghostty/config"
 
+# Claude Code config
+print_info "Setting up Claude Code config..."
+mkdir -p "$HOME/.claude/plugins"
+create_symlink "~/.claude/settings.json" "claude/settings.json"
+create_symlink "~/.claude/skills" "claude/skills"
+create_symlink "~/.claude/plugins/installed_plugins.json" "claude/plugins/installed_plugins.json"
+
 # Install Homebrew packages and casks
 print_info "Installing Homebrew packages and casks..."
 brew bundle install
