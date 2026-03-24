@@ -47,7 +47,24 @@
     "playwright@claude-plugins-official": true,
     "figma@claude-plugins-official": true,
     "claude-code-setup@claude-plugins-official": true,
-    "slack@claude-plugins-official": true
+    "slack@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "code-simplifier@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
   },
-  "skipDangerousModePermissionPrompt": true
+  "voiceEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dev/dotfiles/scripts/sync-claude-config.sh"
+          }
+        ]
+      }
+    ]
+  }
 }

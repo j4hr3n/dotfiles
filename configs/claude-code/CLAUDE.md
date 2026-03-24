@@ -1,5 +1,9 @@
 # Global Instructions
 
+## Commits & PRs
+- Never add `Co-Authored-By` or any Claude/Anthropic attribution to commit messages
+- Never mention Claude in PR descriptions, titles, or issue comments
+
 ## Learnings workflow
 
 After completing a non-trivial task, write key learnings to the project memory file:

@@ -229,11 +229,20 @@ create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "con
 
 # Claude Code config
 print_info "Setting up Claude Code config..."
-mkdir -p "$HOME/.claude/plugins"
-create_symlink "~/.claude/CLAUDE.md" "claude/CLAUDE.md"
-create_symlink "~/.claude/settings.json" "claude/settings.json"
-create_symlink "~/.claude/skills" "claude/skills"
-create_symlink "~/.claude/plugins/installed_plugins.json" "claude/plugins/installed_plugins.json"
+mkdir -p "$HOME/.claude"
+create_symlink "~/.claude/CLAUDE.md" "configs/claude-code/CLAUDE.md"
+create_symlink "~/.claude/settings.json" "configs/claude-code/settings.json"
+create_symlink "~/.claude/skills" "configs/claude-code/skills"
+create_symlink "~/.claude/SKILL.md" "configs/claude-code/SKILL.md"
+create_symlink "~/.claude/statusline-command.sh" "configs/claude-code/statusline-command.sh"
+
+# Install Claude Code plugins (installed_plugins.json has machine-local paths, so we install via CLI)
+if command -v claude &> /dev/null; then
+  print_info "Installing Claude Code plugins..."
+  for plugin in frontend-design code-review typescript-lsp playwright figma claude-code-setup slack skill-creator code-simplifier superpowers; do
+    claude plugins install "${plugin}@claude-plugins-official" 2>/dev/null || true
+  done
+fi
 
 # Install Homebrew packages and casks
 print_info "Installing Homebrew packages and casks..."

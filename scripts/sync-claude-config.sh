@@ -6,8 +6,8 @@ DOTFILES="$HOME/dev/dotfiles"
 
 cd "$DOTFILES" || exit 1
 
-if ! git diff --quiet claude/; then
-  git add claude/
+if ! git diff --quiet configs/claude-code/; then
+  git add configs/claude-code/
   git commit -m "auto: sync claude config [$(date +%Y-%m-%d)]"
   git push
 fi
