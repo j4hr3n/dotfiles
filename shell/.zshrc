@@ -20,7 +20,7 @@ SAVEHIST=100000
 setopt appendhistory
 
 # set up zsh plugins
-plugins=(git zsh-you-should-use)
+plugins=(git)
 
 # start oh-my-zsh
 source $ZSH/oh-my-zsh.sh
@@ -47,3 +47,14 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
     export PATH="/opt/homebrew/sbin:$PATH"
     eval $(/opt/homebrew/bin/brew shellenv)
 fi
+
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+. "$HOME/.local/bin/env"
+
+# bun completions
+[ -s "/Users/christofferjahren/.bun/_bun" ] && source "/Users/christofferjahren/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
