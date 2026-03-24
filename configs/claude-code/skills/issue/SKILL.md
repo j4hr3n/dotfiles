@@ -1,85 +1,85 @@
-# /issue — Create a GitHub issue with codebase context
+---
+name: issue
+description: Create a GitHub issue with codebase context. Trigger when the user wants to file a GitHub issue, report a bug, request a feature, create a ticket, log a task, or open an issue. Covers prompts like "file an issue for ...", "create a ticket", "open a bug report", "I want to track this as an issue", "make an issue", or "/issue".
+---
 
-## Trigger
+# Create GitHub Issue
 
-The user runs `/issue <description>`.
+You are filing a well-researched GitHub issue. Good issues save future-you hours of context-switching — invest a few minutes now to explore the codebase and write clearly.
 
-## Inputs
+## Step 1: Explore the codebase
 
-- `$ARGUMENTS`: A concise description of the issue or feature request.
+Parse the description from `$ARGUMENTS`. Before writing anything, search the codebase for files, patterns, and prior art related to the issue. This context makes the difference between a vague ticket and one someone can actually pick up and work on.
 
-## Instructions
+## Step 2: Detect the repository
 
-You are executing the `/issue` skill. Follow these steps strictly in order.
+Determine which GitHub repo to target:
 
-### Step 1: Understand and explore
+```bash
+gh repo view --json nameWithOwner -q .nameWithOwner
+```
 
-- Parse the description from `$ARGUMENTS`.
-- Use Explore agents (via the Task tool with `subagent_type=Explore`) to find relevant files, patterns, and context in the codebase that relate to the issue.
+If this fails or the project isn't a GitHub repo, ask the user which repo to use.
 
+## Step 3: Draft the issue
 
-### Step 2: Draft the issue
-
-Write a well-structured GitHub issue with these sections:
+Write a focused GitHub issue:
 
 ```markdown
 ## Context
-<!-- Why this matters, what prompted it -->
+<!-- Why this matters — what prompted it, what pain it causes -->
 
 ## Description
-<!-- What needs to happen, clearly stated -->
+<!-- What needs to happen, stated clearly enough that someone unfamiliar could start working -->
 
 ## Acceptance criteria
 - [ ] Criterion 1
 - [ ] Criterion 2
 
 ## Technical notes
-<!-- Relevant files, patterns, constraints discovered during exploration -->
+<!-- Relevant files, patterns, constraints discovered during exploration. Skip this section if there's nothing useful to add. -->
 ```
 
-### Step 3: Select labels
+Keep it concise. Every sentence should either clarify scope or reduce ambiguity.
 
-Choose appropriate labels from the repository. Common labels include:
-- `enhancement` — new feature or improvement
-- `bug` — something isn't working
-- `documentation` — docs changes
-- `refactor` — code restructuring without behavior change
+## Step 4: Select labels
 
-If unsure about available labels, run: `gh label list --repo DIPSAS/agent-platform`
+Pick labels that exist in the repo. When unsure what's available:
 
-### Step 4: Present for confirmation
+```bash
+gh label list
+```
 
-Show the user:
-1. The full issue title and body (formatted)
-2. The selected labels
-3. Ask: **"Create this issue? (yes/no)"**
+Common choices: `enhancement`, `bug`, `documentation`, `refactor`.
 
-**Do NOT create the issue until the user explicitly confirms.**
+## Step 5: Present for confirmation
 
-### Step 5: Create the issue and link to project board
+Show the user the full issue (title, body, labels) and ask: **"Create this issue?"**
+
+Do not create it until the user confirms. This is the user's name on the issue — they get final say.
+
+## Step 6: Create the issue
 
 Once approved:
 
-1. **Create the issue:**
-   ```bash
-   gh issue create --repo DIPSAS/agent-platform \
-     --title "<title>" \
-     --body "<body>" \
-     --label "<label1>,<label2>"
-   ```
+```bash
+gh issue create \
+  --title "<title>" \
+  --body "<body>" \
+  --label "<label1>,<label2>"
+```
 
-2. **Capture the issue URL** from the output.
+Report back with the issue number and URL.
 
-3. **Add to the project board:**
-   ```bash
-   gh project item-add 5 --owner DIPSAS --url <issue-url>
-   ```
+If the repo uses a GitHub project board, offer to add the issue:
 
-4. **Report back** with the issue number, URL, and confirmation it was added to the project board.
+```bash
+gh project item-add <project-number> --owner <org> --url <issue-url>
+```
 
-### Error handling
+## Error handling
 
-- If `gh` commands fail with authentication or network errors, inform the user they may need to:
-  - Run `gh auth status` to check authentication
-  - Adjust sandbox network settings via `/sandbox` to allow `github.com`
-  - Run `gh auth login` if not authenticated
+If `gh` commands fail, the most common causes are:
+- Not authenticated — `gh auth status` to check, `gh auth login` to fix
+- Network restrictions — sandbox may need `github.com` allowed
+- Wrong repo context — the command ran from a directory without a git remote
