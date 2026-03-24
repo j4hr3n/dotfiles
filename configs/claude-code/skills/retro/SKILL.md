@@ -1,95 +1,68 @@
-# /retro — Process improvement after any work session
+# /retro — Improve skills and config after a work session
 
 ## Trigger
 
-The user runs `/retro` (no arguments). Reviews the most recent work in the current session and proposes improvements to skills and config.
+The user runs `/retro`. Reviews the current session and proposes improvements to skills and configuration so future sessions go smoother.
 
 ## Inputs
 
-None — context is gathered automatically from the conversation, git history, and session artifacts.
+None — context comes from the conversation, git history, and project files.
 
 ## Instructions
 
-You are executing the `/retro` skill. Follow these steps strictly in order.
+You are executing the `/retro` skill. The goal is continuous improvement: each session should leave the tooling slightly better than it was. Follow these steps in order.
 
 ---
 
 ### Step 1: Gather context
 
-Collect information about the most recent work. Not all sources will be relevant every time — adapt to what actually happened in the session.
+Build a picture of what happened this session. Adapt to what's relevant — not every source matters every time.
 
-1. **Conversation context:**
-   Review the current conversation to understand what was done. This may include:
-   - Code implementation (feature work, bug fixes, refactoring)
-   - Code reviews (PR reviews, feedback)
-   - Research and exploration
-   - Issue creation or triage
-   - Configuration changes
-   - Any other workflow
+1. **Conversation history** (primary source): Review what was done — implementation, reviews, research, config changes, debugging, etc. Git history alone misses review-only or research-only sessions.
 
-   This is the primary source of truth for what happened — git history alone may not capture review-only or research-only sessions.
-
-2. **Git history** (if code was changed):
+2. **Git history** (if code changed):
    ```bash
    git log --oneline -20
    git diff main...HEAD --stat
    ```
-   Understand what changed and on which branch. Skip if the session didn't involve code changes.
 
-3. **Plan files:** Check `.claude/plans/` in the project root for any plan files from the session.
+3. **Plan files**: Check `.claude/plans/` for any plans created this session.
 
-4. **Current skills and config:**
-   - Scan `~/.claude/skills/*/SKILL.md` for all active skills.
-   - Read `~/.claude/CLAUDE.md` (global) and any project-level `CLAUDE.md`.
+4. **Current skills and config**: Read all `SKILL.md` files in the skills directories, plus global and project-level `CLAUDE.md` files. You need to know what exists before you can improve it.
 
 ---
 
-### Step 2: Evaluate process
+### Step 2: Identify friction and gaps
 
-For each area, assess what worked and what caused friction during the recent work:
+Compare what actually happened against what the skills and config expected. Focus on:
 
-- **Skills** (`~/.claude/skills/*/SKILL.md`) — Did the workflow instructions match reality? Were steps missing, wrong, unnecessary, or in the wrong order?
-- **CLAUDE.md** (global + project) — Are there new conventions, patterns, or constraints that should be documented? Are existing instructions outdated?
-- **Settings & config** — Did permissions, env vars, model settings, or sandbox configuration cause friction?
+- **Skills**: Did instructions match reality? Were steps missing, wrong, redundant, or ordered badly? Did a skill fail to trigger when it should have?
+- **CLAUDE.md** (global + project): Are there new conventions or constraints that should be captured? Are existing rules outdated or contradicted by practice?
+- **Settings & config**: Did permissions, sandbox, or environment cause unnecessary friction?
+
+The point is to find the delta between how work *should* flow and how it *actually* flowed.
 
 ---
 
 ### Step 3: Propose changes
 
-Present a summary to the user with these sections:
+Present a summary:
 
-1. **What worked well** — Keep these as-is.
+1. **What worked well** — Reinforce what doesn't need changing.
 2. **What caused friction** — Describe the problem and its impact.
-3. **Proposed edits** — For each proposed change, show:
-   - The target file path
+3. **Proposed edits** — For each change, show:
+   - Target file path
    - What to add, modify, or remove
-   - Why this change helps
+   - Why this improves future sessions
 
-**Do NOT apply any changes yet.** Wait for the user to approve, modify, or reject each proposal.
+If nothing meaningful needs changing, say so. Not every session warrants edits.
 
-If there are no meaningful improvements to suggest, say so — not every session warrants changes.
+**Do NOT apply changes yet.** Wait for the user to approve, modify, or reject each proposal.
 
 ---
 
 ### Step 4: Apply approved changes
 
-Edit the relevant files based on user approval:
+Edit the approved files (skill files, `CLAUDE.md`, etc.).
 
-- Skill files (`~/.claude/skills/*/SKILL.md`)
-- Config files (`CLAUDE.md`, global or project-level)
-- Any other config files the user approves
-
-Commit changes if they are non-trivial, using branch prefix `chore/` (e.g., `chore/retro-update-solve-skill`).
-
----
-
-### Step 5: Log the retro
-
-Append a dated entry to `~/.claude/retro/log.md` (create the file and directory if they don't exist):
-
-```markdown
-## YYYY-MM-DD — <short description>
-- **Trigger**: What work prompted this retro
-- **Changes made**: Which files were updated and why
-- **Deferred**: Ideas noted but not acted on yet
-```
+Commit using branch prefix `chore/` (e.g., `chore/retro-improve-review-skill`).
