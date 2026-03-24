@@ -1,4 +1,4 @@
-# /solve — Solve GitHub issues end-to-end
+# /solve-dips — Solve DIPS GitHub issues end-to-end
 
 ## Trigger
 

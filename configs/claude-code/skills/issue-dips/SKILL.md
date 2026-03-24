@@ -1,5 +1,5 @@
 ---
-name: issue
+name: issue-dips
 description: Create a GitHub issue with codebase context. Trigger when the user wants to file a GitHub issue, report a bug, request a feature, create a ticket, log a task, or open an issue. Covers prompts like "file an issue for ...", "create a ticket", "open a bug report", "I want to track this as an issue", "make an issue", or "/issue".
 ---
 
