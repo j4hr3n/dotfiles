@@ -2,7 +2,7 @@
 
 ## Trigger
 
-The user runs `/review <PR-URL-or-number>` or asks to review a specific PR.
+The user runs `/review`, asks to "review a PR", "look at a pull request", "check this PR", or provides an Azure DevOps PR URL or number and wants feedback on it.
 
 ## Inputs
 
@@ -10,7 +10,7 @@ The user runs `/review <PR-URL-or-number>` or asks to review a specific PR.
 
 ## Instructions
 
-You are executing the `/review` skill. Act as a **senior developer** focused on code quality. Follow these steps strictly in order.
+You are a senior developer reviewing a pull request. Your job is to catch real problems, not to generate noise. Follow these steps in order.
 
 ---
 
@@ -22,81 +22,76 @@ Extract the PR number from `$ARGUMENTS` (parse from URL if needed).
 az repos pr show --id <number> --organization https://dev.azure.com/dips --output json
 ```
 
-Note: `az repos pr show` only needs `--organization` — do NOT pass `--project` or `--repository`.
+**Important:** `az repos pr show` only needs `--organization`. Do NOT pass `--project` or `--repository` — the PR ID is globally unique.
 
-Extract and display: title, author, description, source branch, target branch, status.
+Extract: title, author, description, source branch, target branch, status.
 
 ---
 
 ### Step 2: Get the diff
 
+Use the **target branch from the PR metadata** (not hardcoded `main`):
+
 ```bash
-git fetch origin <source-branch> main
-git log --oneline origin/main..origin/<source-branch>
-git diff origin/main...origin/<source-branch> --stat
-git diff origin/main...origin/<source-branch>
+git fetch origin <source-branch> <target-branch>
+git log --oneline origin/<target-branch>..origin/<source-branch>
+git diff origin/<target-branch>...origin/<source-branch> --stat
+git diff origin/<target-branch>...origin/<source-branch>
 ```
 
-Understand the scope: how many files changed, which packages are affected, how large is the change.
+Note the scope: file count, packages affected, size of the change. This tells you how deep to go.
 
 ---
 
-### Step 3: Read affected files in full
+### Step 3: Build context around the changes
 
-For every file touched by the PR, read the **full file** (not just the diff hunks) to understand the surrounding context. This is critical for catching issues the diff alone won't reveal — broken assumptions, missed call sites, incomplete refactors.
+The diff alone is not enough — you need surrounding context to catch broken assumptions, missed call sites, and incomplete refactors.
 
-Also check for:
-- Co-located test files (`*.test.tsx`, `*.test.ts`) — do they exist? Were they updated?
-- Related files that consume or are consumed by the changed code
+- **Read full files** for any file where the diff touches logic, APIs, types, or contracts.
+- **Skip full reads** for trivial changes (typos, import reordering, config tweaks) — the diff is sufficient.
+- **Check for co-located tests** (`*.test.ts`, `*.test.tsx`, `*.spec.ts`) — do they exist? Were they updated to match the changes?
+- **Check consumers** — if a function signature, type, or export changed, look at files that import it.
+
+Scale your effort to the PR. A 3-line bug fix needs a glance; an architectural change needs thorough reading.
 
 ---
 
-### Step 4: Review as a senior developer
+### Step 4: Review
 
-Evaluate the changes against these criteria, referencing the project's code-review checklist (`.claude/skills/code-review/SKILL.md`):
+Evaluate the changes against these categories:
 
-**Blocking issues** (must fix before merge):
+**Blocking** (must fix before merge):
 - Bugs, logic errors, incorrect behavior
-- Security vulnerabilities (XSS, injection, exposed secrets)
+- Security vulnerabilities (XSS, injection, exposed secrets, leaked credentials)
 - Type safety violations (`any`, missing null checks, unsound casts)
 - Breaking changes to public APIs or shared contracts
-- Silent error swallowing
+- Silent error swallowing (catch blocks that hide failures)
 
-**Suggestions** (should fix, but not blocking):
-- Missing or insufficient test coverage for changed code
-- Incorrect architectural layer placement
-- Code duplication where an abstraction exists
-- Naming inconsistencies with codebase conventions
-- Missing edge case handling (empty states, error states, loading)
-- Accessibility gaps
+**Suggestions** (worth fixing, not blocking):
+- Missing or insufficient test coverage for new/changed behavior
+- Code duplication where a shared abstraction already exists
+- Missing edge case handling (empty states, error paths, loading states)
+- Naming that misleads or contradicts codebase conventions
+- Architectural layering issues
 
-**Nitpicks** (minor, optional):
-- Style preferences not enforced by tooling
+**Nitpicks** (minor, take-or-leave):
+- Style preferences not enforced by linters
 - Minor naming improvements
 - Documentation gaps
-
-**Also verify:**
-- Named exports only (no default exports)
-- Puls semantic tokens used (no raw Tailwind colors or hex values)
-- Correct data fetching pattern (server client vs browser client)
-- No raw `fetch` calls
-- Biome-compatible formatting and import ordering
 
 ---
 
 ### Step 5: Present findings
 
-Organize the review clearly:
-
 ```
 ## PR #<number>: <title>
-**Author:** <name> | **Files changed:** <count> | **Scope:** <packages affected>
+**Author:** <name> | **Files changed:** <count> | **Target:** <target-branch>
 
 ### Blocking
-- <issue with file:line reference and explanation>
+- [file:line] — <what's wrong and why it matters>
 
 ### Suggestions
-- <suggestion with file:line reference and explanation>
+- [file:line] — <what to improve and why>
 
 ### Nitpicks
 - <nitpick>
@@ -106,31 +101,32 @@ Organize the review clearly:
 <Brief rationale>
 ```
 
-If there are no blocking issues or suggestions, say so clearly — don't manufacture feedback.
+If there are no blocking issues or suggestions, say so. Do not manufacture feedback — an empty section is a good signal.
 
 ---
 
 ### Step 6: Act on verdict
 
-Ask the user whether to:
+Ask the user which action to take:
+
 1. **Approve** — `az repos pr set-vote --id <number> --vote approve --organization https://dev.azure.com/dips`
-2. **Approve with comments** — Post review comments first, then approve
+2. **Approve with comments** — post comments, then approve
 3. **Request changes** — `az repos pr set-vote --id <number> --vote reject --organization https://dev.azure.com/dips`
-4. **Do nothing** — Leave the review as informational only
+4. **Do nothing** — leave as informational only
 
-Note: `az repos pr set-vote` only needs `--organization` — do NOT pass `--project` or `--repository`.
+**Important:** `az repos pr set-vote` only needs `--organization`. Do NOT pass `--project` or `--repository`.
 
-Execute the chosen action. If posting comments, use:
+To post comments:
 ```bash
 az repos pr comment create --id <number> --content "<comment>" --organization https://dev.azure.com/dips
 ```
 
 ---
 
-### Review principles
+### Principles
 
-- **Be honest.** If the code is good, say so. Don't invent problems.
-- **Be specific.** Reference file paths and line numbers. Explain *why* something is an issue, not just *what*.
-- **Be proportionate.** A 4-line utility change doesn't need the same scrutiny as an architectural refactor.
-- **Respect intent.** Understand what the author was trying to achieve before suggesting alternatives.
+- **Be honest.** Good code deserves acknowledgment, not invented problems.
+- **Be specific.** Reference file paths and line numbers. Explain *why* something is an issue.
+- **Be proportionate.** Match review depth to change scope.
+- **Respect intent.** Understand what the author aimed for before suggesting alternatives.
 - **Stay in scope.** Review what changed. Don't suggest refactoring untouched code.
