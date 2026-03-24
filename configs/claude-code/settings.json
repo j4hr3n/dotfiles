@@ -39,6 +39,19 @@
     ]
   },
   "model": "claude-opus-4-6",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dev/dotfiles/scripts/sync-claude-config.sh"
+          }
+        ]
+      }
+    ]
+  },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
@@ -53,18 +66,5 @@
     "superpowers@claude-plugins-official": true
   },
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/dev/dotfiles/scripts/sync-claude-config.sh"
-          }
-        ]
-      }
-    ]
-  }
+  "skipDangerousModePermissionPrompt": true
 }
