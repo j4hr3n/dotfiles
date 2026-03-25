@@ -92,12 +92,22 @@ Once approved, implement each issue:
    ```
    Use `Refs` (not `Closes`) so the issue stays open until PR merge.
 
-5. **Verify:**
+5. **Verify** (adapt to target repo):
+
+   **agent-platform (Python):**
+   ```bash
+   uv run pytest src/platform/tests/ -v
+   uv run ruff check <changed-dirs>
+   uv run ruff format --check <changed-dirs>
+   ```
+
+   **Pilar (TypeScript):**
    ```bash
    turbo run test --filter=<affected-packages>
    pnpm biome check <changed-files>
    turbo run typecheck --filter=<affected-packages>
    ```
+
    Fix any failures before proceeding.
 
 #### Multiple issues
