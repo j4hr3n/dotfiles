@@ -76,10 +76,12 @@ When the issue includes a Figma URL, extract both visual styling and **interacti
 
 Once approved, implement each issue:
 
-1. **Branch from main:**
+1. **Fetch and branch from latest main:**
    ```bash
-   git checkout -b feat/issue-<number>-<short-slug> main
+   git fetch origin main
+   git checkout -b feat/issue-<number>-<short-slug> origin/main
    ```
+   Always use `origin/main` (not local `main`) to ensure the branch is based on the latest remote state.
    Use prefixes: `feat/`, `fix/`, `refactor/`, `docs/` as appropriate.
 
 2. **Implement the plan.**
