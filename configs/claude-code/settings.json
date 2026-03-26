@@ -36,7 +36,8 @@
       "Read(~/**)",
       "Edit(~/.claude/**)",
       "Write(~/.claude/**)"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "model": "claude-opus-4-6",
   "hooks": {
@@ -67,5 +68,6 @@
     "posthog@claude-plugins-official": true
   },
   "voiceEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true
 }
