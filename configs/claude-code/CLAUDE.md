@@ -6,8 +6,9 @@
 
 ## Memory & Persistence
 
-- Do **not** write project-specific memory files (no `MEMORY.md`, no memory directories).
-- If a pattern, convention, or learning needs to persist, propose a skill update instead.
+- Do **not** write architecture, structure, or file-path memories — these go stale fast. Read the code instead.
+- Gotchas, feedback, and non-obvious constraints are fine to persist in project memory.
+- If a recurring pattern or convention needs to persist across projects, propose a skill update instead.
 
 ## Permissions
 
