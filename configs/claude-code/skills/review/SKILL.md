@@ -1,12 +1,14 @@
-# /review — Review an Azure DevOps pull request
+# /review — Review a pull request
 
 ## Trigger
 
-The user runs `/review`, asks to "review a PR", "look at a pull request", "check this PR", or provides an Azure DevOps PR URL or number and wants feedback on it.
+The user runs `/review`, asks to "review a PR", "look at a pull request", "check this PR", or provides a PR URL or number and wants feedback on it.
 
 ## Inputs
 
-- `$ARGUMENTS`: An Azure DevOps PR URL (e.g., `https://dev.azure.com/dips/DIPS/_git/Pilar/pullrequest/182006`) or a PR number (e.g., `182006`).
+- `$ARGUMENTS`: A PR URL or number. Supports:
+  - Azure DevOps: `https://dev.azure.com/dips/DIPS/_git/Pilar/pullrequest/182006` or a number
+  - GitHub: `https://github.com/org/repo/pull/123`, `org/repo#123`, or a number
 
 ## Instructions
 
@@ -14,10 +16,28 @@ You are a senior developer reviewing a pull request. Your job is to catch real p
 
 ---
 
-### Step 1: Fetch PR metadata
+### Step 1: Detect platform and fetch PR metadata
 
-Extract the PR number from `$ARGUMENTS` (parse from URL if needed).
+Parse `$ARGUMENTS` to determine the platform:
 
+- URL contains `github.com` or format is `owner/repo#N` → **GitHub**
+- URL contains `dev.azure.com` → **Azure DevOps**
+- Just a number → detect from the current repo's remote:
+
+```bash
+git remote get-url origin 2>/dev/null
+```
+
+If it contains `github.com` → GitHub. If it contains `dev.azure.com` or `visualstudio.com` → Azure DevOps.
+
+**GitHub:**
+```bash
+gh pr view <number-or-url> --json title,author,body,headRefName,baseRefName,state,number,url
+```
+
+Extract: title, author login, body, source branch (`headRefName`), target branch (`baseRefName`), state.
+
+**Azure DevOps:**
 ```bash
 az repos pr show --id <number> --organization https://dev.azure.com/dips --output json
 ```
@@ -49,7 +69,7 @@ The diff alone is not enough — you need surrounding context to catch broken as
 
 - **Read full files** for any file where the diff touches logic, APIs, types, or contracts.
 - **Skip full reads** for trivial changes (typos, import reordering, config tweaks) — the diff is sufficient.
-- **Check for co-located tests** (`*.test.ts`, `*.test.tsx`, `*.spec.ts`) — do they exist? Were they updated to match the changes?
+- **Check for co-located tests** (`*.test.ts`, `*.test.tsx`, `*.spec.ts`, `*_test.py`, `test_*.py`) — do they exist? Were they updated to match the changes?
 - **Check consumers** — if a function signature, type, or export changed, look at files that import it.
 
 Scale your effort to the PR. A 3-line bug fix needs a glance; an architectural change needs thorough reading.
@@ -109,17 +129,25 @@ If there are no blocking issues or suggestions, say so. Do not manufacture feedb
 
 Ask the user which action to take:
 
+**GitHub:**
+1. **Approve** — `gh pr review <number> --approve`
+2. **Approve with comments** — `gh pr review <number> --comment --body "<summary>"`, then approve
+3. **Request changes** — `gh pr review <number> --request-changes --body "<summary>"`
+4. **Do nothing** — leave as informational only
+
+**Azure DevOps:**
 1. **Approve** — `az repos pr set-vote --id <number> --vote approve --organization https://dev.azure.com/dips`
 2. **Approve with comments** — post comments, then approve
 3. **Request changes** — `az repos pr set-vote --id <number> --vote reject --organization https://dev.azure.com/dips`
 4. **Do nothing** — leave as informational only
 
-**Important:** `az repos pr set-vote` only needs `--organization`. Do NOT pass `--project` or `--repository`.
-
 To post comments:
-```bash
-az repos pr comment create --id <number> --content "<comment>" --organization https://dev.azure.com/dips
-```
+
+**GitHub:** `gh pr comment <number> --body "<comment>"`
+
+**Azure DevOps:** `az repos pr comment create --id <number> --content "<comment>" --organization https://dev.azure.com/dips`
+
+**Important:** `az repos pr set-vote` only needs `--organization`. Do NOT pass `--project` or `--repository`.
 
 ---
 
