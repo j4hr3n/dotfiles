@@ -30,7 +30,7 @@
         ]
       }
     ],
-    "PreToolCall": [
+    "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
