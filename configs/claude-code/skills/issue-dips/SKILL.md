@@ -11,15 +11,9 @@ You are filing a well-researched GitHub issue. Good issues save future-you hours
 
 Parse the description from `$ARGUMENTS`. Before writing anything, search the codebase for files, patterns, and prior art related to the issue. This context makes the difference between a vague ticket and one someone can actually pick up and work on.
 
-## Step 2: Detect the repository
+## Step 2: Target repository
 
-Determine which GitHub repo to target:
-
-```bash
-gh repo view --json nameWithOwner -q .nameWithOwner
-```
-
-If this fails or the project isn't a GitHub repo, ask the user which repo to use.
+Always create issues in the **DIPSDev/agents** GitHub repo. Run all `gh` commands from the agents working directory (`~/dev/agents`) or pass `-R DIPSDev/agents` explicitly.
 
 ## Step 3: Draft the issue
 
