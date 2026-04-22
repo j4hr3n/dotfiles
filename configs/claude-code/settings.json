@@ -3,7 +3,11 @@
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "permissions": {
-    "allow": ["Read(~/**)", "Edit", "Write"],
+    "allow": [
+      "Read(~/**)",
+      "Edit",
+      "Write"
+    ],
     "defaultMode": "auto"
   },
   "model": "opus[1m]",
@@ -51,7 +55,8 @@
     "github@claude-plugins-official": true,
     "typescript-lsp@claude-plugins-official": true
   },
-  "voiceEnabled": true,
   "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "voiceEnabled": true,
+  "effortLevel": "high"
 }

@@ -1,0 +1,50 @@
+{
+  "skill_name": "recon",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just joined a team and need to get up to speed on this repo. What should I know before I start making changes?",
+      "expected_output": "A structured report covering file churn hotspots, contributor bus factor, bug-prone files, project momentum, and firefighting patterns. Should connect the dots between sections.",
+      "files": [],
+      "assertions": [
+        {"id": "has-churn-analysis", "text": "Report includes file churn analysis identifying the most frequently changed files"},
+        {"id": "has-contributor-analysis", "text": "Report discusses contributor distribution and bus factor risk"},
+        {"id": "has-bug-clustering", "text": "Report identifies bug-prone files by analyzing fix/bug-related commits"},
+        {"id": "has-momentum", "text": "Report includes project activity/momentum over time"},
+        {"id": "has-firefighting", "text": "Report discusses revert/hotfix/emergency patterns"},
+        {"id": "has-synthesis", "text": "Report synthesizes findings across sections rather than just dumping raw data"},
+        {"id": "has-recommendations", "text": "Report includes actionable recommendations for the user"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "/recon",
+      "expected_output": "Same structured report as above, triggered by direct invocation. Should orient first (README, repo size, age, language), then run all analysis steps.",
+      "files": [],
+      "assertions": [
+        {"id": "has-churn-analysis", "text": "Report includes file churn analysis identifying the most frequently changed files"},
+        {"id": "has-contributor-analysis", "text": "Report discusses contributor distribution and bus factor risk"},
+        {"id": "has-bug-clustering", "text": "Report identifies bug-prone files by analyzing fix/bug-related commits"},
+        {"id": "has-momentum", "text": "Report includes project activity/momentum over time"},
+        {"id": "has-firefighting", "text": "Report discusses revert/hotfix/emergency patterns"},
+        {"id": "has-synthesis", "text": "Report synthesizes findings across sections rather than just dumping raw data"},
+        {"id": "has-recommendations", "text": "Report includes actionable recommendations for the user"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Can you give me a health check of this codebase? I want to know where the risk areas are before I start refactoring.",
+      "expected_output": "A report with emphasis on risk areas — high-churn files, bug clusters, and the overlap between them. Should include actionable recommendations for where to be careful when refactoring.",
+      "files": [],
+      "assertions": [
+        {"id": "has-churn-analysis", "text": "Report includes file churn analysis identifying the most frequently changed files"},
+        {"id": "has-contributor-analysis", "text": "Report discusses contributor distribution and bus factor risk"},
+        {"id": "has-bug-clustering", "text": "Report identifies bug-prone files by analyzing fix/bug-related commits"},
+        {"id": "has-momentum", "text": "Report includes project activity/momentum over time"},
+        {"id": "has-firefighting", "text": "Report discusses revert/hotfix/emergency patterns"},
+        {"id": "has-synthesis", "text": "Report synthesizes findings across sections rather than just dumping raw data"},
+        {"id": "has-recommendations", "text": "Report includes actionable recommendations for the user"}
+      ]
+    }
+  ]
+}
