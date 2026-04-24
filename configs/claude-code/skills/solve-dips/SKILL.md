@@ -17,16 +17,29 @@ You are executing the `/solve` skill. Follow these phases in order. Each phase g
 
 ### Phase 1: Read issues
 
-For each issue number in `$ARGUMENTS`:
+First, **resolve `<owner>/<repo>` and the GitHub host** from each input in `$ARGUMENTS`:
+
+| Input form | Repo | Host |
+|-----------|------|------|
+| Bare number (`42`) | `DIPSAS/agent-platform` (default) | `github.com` |
+| Owner-qualified (`DIPSAS/agent-platform#42`) | as given | `github.com` |
+| `https://github.com/<owner>/<repo>/issues/<n>` | from URL | `github.com` |
+| `https://dips.ghe.com/<owner>/<repo>/issues/<n>` | from URL | `dips.ghe.com` |
+
+When the host is `dips.ghe.com`, **prepend `GH_HOST=dips.ghe.com` to every `gh` call** in this flow (view, edit, pr create, project lookups). `az` commands are unaffected.
+
+Then for each issue:
 
 ```bash
-gh issue view <number> --repo DIPSAS/agent-platform
+gh issue view <number> --repo <owner>/<repo>
 ```
 
 Collect the title, body, labels, and any linked issues. Assign yourself:
 ```bash
-gh issue edit <number> --repo DIPSAS/agent-platform --add-assignee @me
+gh issue edit <number> --repo <owner>/<repo> --add-assignee @me
 ```
+
+Use the resolved `<owner>/<repo>` consistently in later phases — `Refs` footers, PR descriptions, and board lookups all key off it.
 
 ---
 
@@ -68,7 +81,7 @@ When the issue includes a Figma URL, extract both visual styling and **interacti
 
 **Present a concise summary of all plans.** Highlight key decisions and open questions.
 
-**Wait for explicit approval** ("go", "do it", "looks good") before proceeding.
+**Wait for explicit approval** ("go", "do it", "looks good") before proceeding. **This gate applies even in auto mode** — the user wants a human check on the plan before any code is written, regardless of issue size or perceived risk. Do not skip it.
 
 ---
 
@@ -112,6 +125,12 @@ Once approved, implement each issue:
 
    Fix any failures before proceeding.
 
+   **Typecheck noise caveat:** `turbo run typecheck` runs against the whole package and may surface pre-existing errors from files you didn't touch. Before fixing anything, grep for your changed files:
+   ```bash
+   turbo run typecheck --filter=<pkg> 2>&1 | grep <changed-file>
+   ```
+   If your files aren't in the output, the failures are pre-existing on `origin/main` — report and move on, don't fix unless the user asks.
+
 #### Multiple issues
 
 After collective plan approval, use the **Task tool** to create parallel agents (`subagent_type=general-purpose`), one per issue. Each agent gets its own branch. If any issue targets both repos, use the agent team flow below for that issue instead.
@@ -140,6 +159,7 @@ Use an **agent team** for cross-repo issues:
 After implementation:
 
 1. Report to the user: branch name(s), commit list, test results, any issues encountered.
+2. **Suggest running `/simplify`** as the next step before push. The three review agents (reuse, quality, efficiency) catch issues while commits are still amendable locally — running it *after* push forces a force-push (often blocked by the branch guard) or an extra follow-up commit. Offer it explicitly in the report.
 
 **STOP.** Do not push or create PRs. The user verifies manually and decides when to ship.
 
@@ -165,9 +185,10 @@ For each solved issue:
        --repository Pilar --org https://dev.azure.com/dips --project DIPS
      ```
 
-   - **agent-platform (GitHub):**
+   - **agent-platform / DIPS GHE (GitHub):**
      ```bash
-     gh pr create --repo DIPSAS/agent-platform --title "<title>" --body "<body>"
+     gh pr create --repo <owner>/<repo> --title "<title>" --body "<body>"
+     # Prepend GH_HOST=dips.ghe.com when the issue lives on DIPS GHE.
      ```
 
    PR body format:
@@ -175,27 +196,34 @@ For each solved issue:
    ## Summary
    - <bullet points>
 
-   Refs DIPSAS/agent-platform#<number>
+   Refs <owner>/<repo>#<number>
 
    ## Test plan
    - [ ] Tests pass locally
    - [ ] <specific verification steps>
    ```
 
-3. **Update project board status to "In Review":**
+3. **Update project board status to "In Review" — always, when the issue has a board.**
 
-   Look up IDs dynamically — project number is `5`, owner is `DIPSAS`:
+   This is a mandatory step after every PR, not optional. Don't skip it even if the user didn't explicitly ask. Look up the project from the issue itself so this works across orgs and hosts:
+
    ```bash
-   # Get project node ID
-   gh api graphql -f query='{ organization(login: "DIPSAS") { projectV2(number: 5) { id } } }'
-   # Get field IDs (find Status field and "In Review" option)
-   gh project field-list 5 --owner DIPSAS --format json
-   # Get item ID
-   gh project item-list 5 --owner DIPSAS --limit 200 --format json | jq '.items[] | select(.content.number == <issue-number>)'
-   # Update status
-   gh project item-edit --project-id <project-node-id> --id <item-id> --field-id <status-field-id> --single-select-option-id <in-review-option-id>
+   gh issue view <number> --repo <owner>/<repo> --json projectItems
+   # Prepend GH_HOST=dips.ghe.com for DIPS GHE.
    ```
-   If project board commands fail, report but don't block — the PR is what matters.
+
+   If `projectItems` is empty, the issue isn't on a board — skip silently. Don't fabricate one.
+
+   Otherwise, resolve the project's number/owner from the response and drive the Status field:
+   ```bash
+   gh project field-list <project-number> --owner <project-owner> --format json
+   gh project item-list <project-number> --owner <project-owner> --limit 200 --format json \
+     | jq '.items[] | select(.content.number == <issue-number>)'
+   gh project item-edit --project-id <project-node-id> --id <item-id> \
+     --field-id <status-field-id> --single-select-option-id <in-review-option-id>
+   ```
+
+   Sandbox mode can block these calls (network/auth). If that happens, re-run with `dangerouslyDisableSandbox: true` once to confirm scopes are the blocker, otherwise fall through. Report the outcome — the PR is what matters; don't block on a failed board update.
 
 4. **Cross-reference companion PRs (multi-repo only):**
    Edit each PR description to append `Companion PR: <URL>` using `gh pr edit` or `az repos pr update`.
