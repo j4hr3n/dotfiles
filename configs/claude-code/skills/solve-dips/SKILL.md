@@ -28,6 +28,8 @@ First, **resolve `<owner>/<repo>` and the GitHub host** from each input in `$ARG
 
 When the host is `dips.ghe.com`, **prepend `GH_HOST=dips.ghe.com` to every `gh` call** in this flow (view, edit, pr create, project lookups). `az` commands are unaffected.
 
+> **DIPS GHE sandbox quirk**: `gh` calls to `dips.ghe.com` fail TLS verification inside the sandbox (macOS keychain isolation) and may also surface as "invalid token" / "failed to log in". Pass `dangerouslyDisableSandbox: true` on the first `gh` call rather than chasing a phantom auth issue. If the project's `.claude/settings.local.json` sets `env.SSL_CERT_FILE=/etc/ssl/cert.pem`, sandbox mode works — check there first.
+
 Then for each issue:
 
 ```bash
@@ -106,6 +108,8 @@ Once approved, implement each issue:
    Refs DIPSAS/agent-platform#<number>
    ```
    Use `Refs` (not `Closes`) so the issue stays open until PR merge.
+
+   > **Lefthook + sandbox**: in Pilar, `git commit` runs lefthook which rewrites `.git/hooks/*`. Sandbox blocks that with "operation not permitted". Pass `dangerouslyDisableSandbox: true` for `git commit` here unless the project's `settings.local.json` allows `.git/hooks/**` writes.
 
 5. **Verify** (adapt to target repo):
 
