@@ -216,7 +216,7 @@ For each solved issue:
    # Prepend GH_HOST=dips.ghe.com for DIPS GHE.
    ```
 
-   If `projectItems` is empty, the issue isn't on a board — skip silently. Don't fabricate one.
+   If `projectItems` is empty, **don't trust it blindly**: the same empty array comes back when the token is missing the `read:project` scope. Run `gh auth status` first — if the host's token lacks `project` / `read:project`, ask the user to run `gh auth refresh -s project,read:project -h <host>` and re-check. Only treat an empty list as "no board" once you've confirmed the scopes are present. (Default `gh auth login` does **not** request these scopes; on `dips.ghe.com` this bites every time.)
 
    Otherwise, resolve the project's number/owner from the response and drive the Status field:
    ```bash
