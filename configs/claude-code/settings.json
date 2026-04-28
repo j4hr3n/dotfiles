@@ -53,11 +53,21 @@
     "skill-creator@claude-plugins-official": true,
     "posthog@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "code-security-skills@agent-security-playbook": true,
+    "ai-security-skills@agent-security-playbook": true
+  },
+  "extraKnownMarketplaces": {
+    "agent-security-playbook": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/christofferjahren/dev/secure-agent-playbook"
+      }
+    }
   },
   "effortLevel": "high",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "tui": "fullscreen"
+  "voiceEnabled": true
 }
