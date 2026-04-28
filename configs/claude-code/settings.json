@@ -53,9 +53,7 @@
     "skill-creator@claude-plugins-official": true,
     "posthog@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true,
-    "code-security-skills@agent-security-playbook": true,
-    "ai-security-skills@agent-security-playbook": true
+    "typescript-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "agent-security-playbook": {
