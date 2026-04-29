@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Locates the most recent failed Grype Org Scan run (run 25098697388) via gh run list",
+      "passed": true,
+      "evidence": "Section 1 table: 'Run ID 25098697388'"
+    },
+    {
+      "text": "Identifies doffin-bot as the affected repo",
+      "passed": true,
+      "evidence": "Section 2 'Only one repo failed in this run: Techfolk-AS/doffin-bot'"
+    },
+    {
+      "text": "Names go.opentelemetry.io/otel/sdk and the v1.43.0 target version",
+      "passed": true,
+      "evidence": "Section 2 table lists go.opentelemetry.io/otel/sdk with fix-in 1.43.0"
+    },
+    {
+      "text": "Provides a concrete bump command (go get / go mod tidy)",
+      "passed": true,
+      "evidence": "Section 4: 'cd src; go get go.opentelemetry.io/otel/sdk@v1.43.0; go mod tidy'"
+    },
+    {
+      "text": "Detects merged PR #8 and recommends skip rather than would-open",
+      "passed": true,
+      "evidence": "Section 3: 'commit df7e3bc on main already pinned v1.43.0' and recommendation 'Do not open a PR'"
+    },
+    {
+      "text": "Ends with a structured per-repo summary",
+      "passed": true,
+      "evidence": "Section 5 'Summary table \u2014 what would be opened' with Outcome column ('Would open, but already fixed on main \u2192 recommend skip')"
+    },
+    {
+      "text": "Did not perform any remote-mutating operations",
+      "passed": true,
+      "evidence": "Subagent ran read-only gh/git commands; report contains no push/PR commands. NOTE: subagent's Write tool was sandbox-blocked, requiring inline retrieval \u2014 but no remote mutation occurred."
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}

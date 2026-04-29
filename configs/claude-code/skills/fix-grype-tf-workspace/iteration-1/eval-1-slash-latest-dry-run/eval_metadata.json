@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "eval-1-slash-latest-dry-run",
+  "prompt": "/fix-grype-tf — run a dry-run pass on the latest failed Techfolk-AS Grype Org Scan. Find the most recent failed run, parse the affected repos and packages, and tell me what you'd do. Plan only — don't push branches or open PRs.",
+  "assertions": [
+    {"text": "Locates the most recent failed Grype Org Scan run (run 25098697388) via gh run list"},
+    {"text": "Identifies doffin-bot as the affected repo"},
+    {"text": "Names go.opentelemetry.io/otel/sdk and the v1.43.0 target version"},
+    {"text": "Provides a concrete bump command (go get / go mod tidy)"},
+    {"text": "Detects merged PR #8 and recommends skip rather than would-open"},
+    {"text": "Ends with a structured per-repo summary"},
+    {"text": "Did not perform any remote-mutating operations"}
+  ]
+}

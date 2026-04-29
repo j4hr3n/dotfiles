@@ -1,0 +1,11 @@
+{
+  "eval_id": 2,
+  "eval_name": "eval-2-loop-tick-noop",
+  "prompt": "I'm running `/loop /fix-grype-tf` on my machine. For this tick, check whether there's a recent failed run of the `Grype Org Scan` workflow in Techfolk-AS/.github. If everything is green (latest run succeeded), report a one-line no-op and stop — do not bump anything, don't clone repos, don't open PRs. If something is failing, list the affected repos and stop with a plan (still don't push).",
+  "assertions": [
+    {"text": "Correctly identifies latest run as green / successful"},
+    {"text": "Returns a concise no-op (<= 5 lines)"},
+    {"text": "Does not propose any package bumps or PRs"},
+    {"text": "Did not clone repos or perform git mutations"}
+  ]
+}

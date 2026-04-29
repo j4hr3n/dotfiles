@@ -1,0 +1,50 @@
+{
+  "expectations": [
+    {
+      "text": "Identifies doffin-bot as the only affected repo",
+      "passed": true,
+      "evidence": "Line 14: 'Scan: doffin-bot | Techfolk-AS/doffin-bot | 73541933391' and line 16 'Only one repo is affected.'"
+    },
+    {
+      "text": "Names go.opentelemetry.io/otel/sdk as the vulnerable package",
+      "passed": true,
+      "evidence": "Line 26-27: package go.opentelemetry.io/otel/sdk listed twice with both advisories"
+    },
+    {
+      "text": "Targets v1.43.0 (or higher) as the fixed version",
+      "passed": true,
+      "evidence": "Line 29: 'Highest fixed_in per package: go.opentelemetry.io/otel/sdk -> v1.43.0'"
+    },
+    {
+      "text": "Provides a concrete go get / go mod tidy bump command",
+      "passed": true,
+      "evidence": "Lines 39-44: `cd ~/dev/doffin-bot/src && go get go.opentelemetry.io/otel/sdk@v1.43.0 && go mod tidy && go build ./...`"
+    },
+    {
+      "text": "References both GHSAs (GHSA-hfvc-g4fc-pqhx and GHSA-9h8m-3fm2-qjrq)",
+      "passed": true,
+      "evidence": "Lines 26-27 list both GHSAs with their fixed-in versions"
+    },
+    {
+      "text": "Detects existing fix on main (PR #8 merged) and marks doffin-bot as skipped",
+      "passed": true,
+      "evidence": "Line 33 ' doffin-bot \u2014 SKIP', line 48 'PR Techfolk-AS/doffin-bot#8 ... merged 2026-04-29T08:35:20Z'"
+    },
+    {
+      "text": "Ends with a structured per-repo summary using opened/would-open/skipped/failed buckets",
+      "passed": true,
+      "evidence": "Lines 73-76 'opened: 0, would-open: 0, skipped: 1 (doffin-bot), failed: 0'"
+    },
+    {
+      "text": "Did not perform any remote-mutating operations (no git push / no gh pr create)",
+      "passed": true,
+      "evidence": "Line 87: 'No mutating commands were run. No branches pushed. No PRs created.'"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 8,
+    "failed": 0,
+    "total": 8
+  }
+}

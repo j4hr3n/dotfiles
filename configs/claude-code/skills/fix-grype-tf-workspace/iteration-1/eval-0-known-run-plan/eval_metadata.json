@@ -1,0 +1,15 @@
+{
+  "eval_id": 0,
+  "eval_name": "eval-0-known-run-plan",
+  "prompt": "The Techfolk-AS Grype Org Scan failed in run https://github.com/Techfolk-AS/.github/actions/runs/25098697388. Plan the fix end to end: list the affected repos, name each vulnerable package and the target version to bump to, write the exact bump command per affected repo (Go / npm / etc.), and check whether any open fix PRs already exist for those packages — mark those repos as skip. DO NOT push branches or open new PRs. End with a structured per-repo summary (`opened`/`would-open`/`skipped`/`failed`).",
+  "assertions": [
+    {"text": "Identifies doffin-bot as the only affected repo"},
+    {"text": "Names go.opentelemetry.io/otel/sdk as the vulnerable package"},
+    {"text": "Targets v1.43.0 (or higher) as the fixed version"},
+    {"text": "Provides a concrete go get / go mod tidy bump command"},
+    {"text": "References both GHSAs (GHSA-hfvc-g4fc-pqhx and GHSA-9h8m-3fm2-qjrq)"},
+    {"text": "Detects existing fix on main (PR #8 merged) and marks doffin-bot as skipped"},
+    {"text": "Ends with a structured per-repo summary using opened/would-open/skipped/failed buckets"},
+    {"text": "Did not perform any remote-mutating operations (no git push / no gh pr create)"}
+  ]
+}

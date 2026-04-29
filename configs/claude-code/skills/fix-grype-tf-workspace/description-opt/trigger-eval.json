@@ -1,0 +1,23 @@
+[
+  {"query": "/fix-grype-tf", "should_trigger": true},
+  {"query": "the grype scan failed overnight in techfolk-as, can you patch the affected repos before standup", "should_trigger": true},
+  {"query": "https://github.com/Techfolk-AS/.github/actions/runs/25098697388 fix whatever this is flagging", "should_trigger": true},
+  {"query": "doffin-bot got a High GHSA-hfvc-g4fc-pqhx in the daily org scan, bump otel and open a PR pls", "should_trigger": true},
+  {"query": "fix grype failures across our repos", "should_trigger": true},
+  {"query": "loop tick: check if the latest Grype Org Scan in techfolk passed; if not, patch the new failures", "should_trigger": true},
+  {"query": "techfolk grype is red rn, go fix it", "should_trigger": true},
+  {"query": "the daily techfolk security scan caught two new high CVEs in a Go module, can you push fix branches?", "should_trigger": true},
+  {"query": "what would you fix from yesterday's grype run on techfolk-as? dry run only please, dont actually push anything", "should_trigger": true},
+  {"query": "scan failed for tfs-little-helper in techfolk-as, looks like an npm package needs bumping for a high-severity finding", "should_trigger": true},
+
+  {"query": "Run a security scan across our techfolk repos and tell me if anything looks malicious or has hardcoded secrets", "should_trigger": false},
+  {"query": "audit my package.json — I just bumped a bunch of npm deps and want to know which ones have known CVEs", "should_trigger": false},
+  {"query": "I'm worried we have an AWS access key committed somewhere in the techfolk-cms repo, can you grep for hardcoded credentials?", "should_trigger": false},
+  {"query": "do a security review of the changes on my current branch before I open the PR", "should_trigger": false},
+  {"query": "we're building a new LLM agent that has tool use and a system prompt, can you threat model it against OWASP top 10?", "should_trigger": false},
+  {"query": "the grype CLI keeps panicking on my mac when I scan a Java jar, how do I work around the install issue?", "should_trigger": false},
+  {"query": "I want to set up a Grype org-scan workflow in a brand new GitHub org from scratch, walk me through the YAML", "should_trigger": false},
+  {"query": "explain what GHSA-hfvc-g4fc-pqhx actually is and what the attack vector looks like", "should_trigger": false},
+  {"query": "list all archived repos in Techfolk-AS so I can clean up the old ones", "should_trigger": false},
+  {"query": "fix the broken indentation in techfolk-as/.github/.github/workflows/grype-org-scan.yml — the schedule cron syntax is off", "should_trigger": false}
+]

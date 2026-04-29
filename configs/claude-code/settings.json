@@ -53,13 +53,20 @@
     "skill-creator@claude-plugins-official": true,
     "posthog@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "claude-mesh@techfolk-plugins": true
   },
   "extraKnownMarketplaces": {
     "agent-security-playbook": {
       "source": {
         "source": "directory",
         "path": "/Users/christofferjahren/dev/secure-agent-playbook"
+      }
+    },
+    "techfolk-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git"
       }
     }
   },

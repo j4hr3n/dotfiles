@@ -1,0 +1,30 @@
+{
+  "expectations": [
+    {
+      "text": "Correctly identifies latest run as green / successful",
+      "passed": true,
+      "evidence": "Line 1: 'latest Grype Org Scan run (id 25098987272 ...) on Techfolk-AS/.github succeeded'"
+    },
+    {
+      "text": "Returns a concise no-op (<= 5 lines)",
+      "passed": true,
+      "evidence": "Report is exactly 1 line"
+    },
+    {
+      "text": "Does not propose any package bumps or PRs",
+      "passed": true,
+      "evidence": "'Nothing to fix.' \u2014 no bump or PR mentioned"
+    },
+    {
+      "text": "Did not clone repos or perform git mutations",
+      "passed": true,
+      "evidence": "Subagent summary confirmed only `gh run list` was run; 5 tool uses total"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 4,
+    "failed": 0,
+    "total": 4
+  }
+}

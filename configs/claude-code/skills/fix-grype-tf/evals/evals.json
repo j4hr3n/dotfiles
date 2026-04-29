@@ -1,0 +1,29 @@
+{
+  "skill_name": "fix-grype-tf",
+  "evals": [
+    {
+      "id": 0,
+      "name": "eval-0-known-run-plan",
+      "prompt": "The Techfolk-AS Grype Org Scan failed in run https://github.com/Techfolk-AS/.github/actions/runs/25098697388. Plan the fix end to end: list the affected repos, name each vulnerable package and the target version to bump to, write the exact bump command per affected repo (Go / npm / etc.), and check whether any open fix PRs already exist for those packages — mark those repos as skip. DO NOT push branches or open new PRs. End with a structured per-repo summary (`opened`/`would-open`/`skipped`/`failed`).",
+      "expected_output": "A markdown plan that (a) names doffin-bot as the affected repo, (b) identifies go.opentelemetry.io/otel/sdk v1.39.0 as the vulnerable package, (c) targets v1.43.0 (covers GHSA-hfvc-g4fc-pqhx), (d) gives the `go get`/`go mod tidy` command in src/, (e) detects PR #8 already open in doffin-bot and marks it as skipped, (f) ends with a structured per-repo summary table.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "eval-1-slash-latest-dry-run",
+      "prompt": "/fix-grype-tf — run a dry-run pass on the latest failed Techfolk-AS Grype Org Scan. Find the most recent failed run, parse the affected repos and packages, and tell me what you'd do. Plan only — don't push branches or open PRs.",
+      "expected_output": "A markdown plan that locates the latest failed Grype Org Scan run via `gh run list`, enumerates affected repos with their vulnerable packages and target versions, and presents per-repo bump commands. No git push or `gh pr create` invocations.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "eval-2-loop-tick-noop",
+      "prompt": "I'm running `/loop /fix-grype-tf` on my machine. For this tick, check whether there's a recent failed run of the `Grype Org Scan` workflow in Techfolk-AS/.github. If everything is green (latest run succeeded), report a one-line no-op and stop — do not bump anything, don't clone repos, don't open PRs. If something is failing, list the affected repos and stop with a plan (still don't push).",
+      "expected_output": "Either a one-line no-op report (`no failed runs since <last seen>`) when the latest run is green, or a short plan listing affected repos when something is failing. Crucially, no git/file mutations performed.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

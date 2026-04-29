@@ -1,0 +1,45 @@
+{
+  "expectations": [
+    {
+      "text": "Locates the most recent failed Grype Org Scan run (run 25098697388) via gh run list",
+      "passed": true,
+      "evidence": "Line 4: 'Source run: 25098697388'"
+    },
+    {
+      "text": "Identifies doffin-bot as the affected repo",
+      "passed": true,
+      "evidence": "Lines 11-12: 'Scan: doffin-bot | doffin-bot | 73541933391'"
+    },
+    {
+      "text": "Names go.opentelemetry.io/otel/sdk and the v1.43.0 target version",
+      "passed": true,
+      "evidence": "Line 25: 'Highest fixed_in per package: v1.43.0'"
+    },
+    {
+      "text": "Provides a concrete bump command (go get / go mod tidy)",
+      "passed": true,
+      "evidence": "Lines 34-38: `cd /Users/christofferjahren/dev/doffin-bot/src && go get go.opentelemetry.io/otel/sdk@v1.43.0 && go mod tidy`"
+    },
+    {
+      "text": "Detects merged PR #8 and recommends skip rather than would-open",
+      "passed": true,
+      "evidence": "Lines 56-62: PR #8 MERGED, lines 76-77 'skipped: doffin-bot \u2014 fix already merged in PR #8'"
+    },
+    {
+      "text": "Ends with a structured per-repo summary",
+      "passed": true,
+      "evidence": "Lines 73-78: opened/would-open/skipped/failed buckets"
+    },
+    {
+      "text": "Did not perform any remote-mutating operations",
+      "passed": true,
+      "evidence": "Line 84: 'No git push, gh pr create, or other remote-mutating commands were executed.'"
+    }
+  ],
+  "summary": {
+    "pass_rate": 1.0,
+    "passed": 7,
+    "failed": 0,
+    "total": 7
+  }
+}
