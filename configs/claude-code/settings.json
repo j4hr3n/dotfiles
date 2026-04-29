@@ -7,7 +7,8 @@
       "Read(~/**)",
       "Edit",
       "Write",
-      "Bash(claude-mesh *)"
+      "Bash(claude-mesh *)",
+      "Bash(claude-mesh:*)"
     ],
     "defaultMode": "auto"
   },
@@ -66,8 +67,9 @@
     },
     "techfolk-plugins": {
       "source": {
-        "source": "git",
-        "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git"
+        "source": "directory",
+        "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git",
+        "path": "/Users/christofferjahren/dev/techfolk-claude-code-marketplace"
       }
     }
   },
