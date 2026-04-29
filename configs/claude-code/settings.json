@@ -6,7 +6,8 @@
     "allow": [
       "Read(~/**)",
       "Edit",
-      "Write"
+      "Write",
+      "Bash(claude-mesh *)"
     ],
     "defaultMode": "auto"
   },
