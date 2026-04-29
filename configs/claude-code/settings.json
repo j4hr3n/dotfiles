@@ -7,8 +7,7 @@
       "Read(~/**)",
       "Edit",
       "Write",
-      "Bash(claude-mesh *)",
-      "Bash(claude-mesh:*)"
+      "Bash(claude-mesh *)"
     ],
     "defaultMode": "auto"
   },
