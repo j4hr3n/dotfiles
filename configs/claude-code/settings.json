@@ -62,6 +62,12 @@
         "source": "directory",
         "path": "/Users/christofferjahren/dev/secure-agent-playbook"
       }
+    },
+    "techfolk-plugins": {
+      "source": {
+        "source": "git",
+        "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git"
+      }
     }
   },
   "effortLevel": "high",
