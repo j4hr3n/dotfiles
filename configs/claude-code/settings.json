@@ -54,7 +54,8 @@
     "skill-creator@claude-plugins-official": true,
     "posthog@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "dips-ki-posthog@dips-marketplace": true
   },
   "extraKnownMarketplaces": {
     "agent-security-playbook": {
@@ -67,6 +68,12 @@
       "source": {
         "source": "git",
         "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git"
+      }
+    },
+    "dips-marketplace": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/christofferjahren/dev/dips-marketplace"
       }
     }
   },
