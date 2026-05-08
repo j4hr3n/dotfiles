@@ -57,6 +57,8 @@ For each issue, determine the target repo:
 
 Use Explore agents (Task tool, `subagent_type=Explore`) to understand the relevant codebase areas. When classified as **both**, explore both repos. Identify key files, patterns, dependencies, and constraints.
 
+> **Prompt-budget caveat:** keep Explore prompts terse (under ~400 words). The DIPS GHE / Figma / PostHog tool surfaces plus skill reminders consume a meaningful slice of the agent's context budget — verbose prompts get rejected with "Prompt is too long". If you need depth, split into multiple short Explore calls or fall back to direct `Read`/`Bash` instead.
+
 ---
 
 ### Phase 3: Design plan
@@ -164,6 +166,7 @@ After implementation:
 
 1. Report to the user: branch name(s), commit list, test results, any issues encountered.
 2. **Suggest running `/simplify`** as the next step before push. The three review agents (reuse, quality, efficiency) catch issues while commits are still amendable locally — running it *after* push forces a force-push (often blocked by the branch guard) or an extra follow-up commit. Offer it explicitly in the report.
+3. **Consolidate noisy history before pushing.** If iterative feedback produced more than ~5 commits for one logical change (or any commit-then-revert pairs), offer to soft-reset to `origin/main` and recommit in 3-5 logical groups. The branch guard blocks `git reset --hard`, but `git reset --soft origin/main` is allowed and preserves all changes as staged work.
 
 **STOP.** Do not push or create PRs. The user verifies manually and decides when to ship.
 
