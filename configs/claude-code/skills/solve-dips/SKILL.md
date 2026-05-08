@@ -192,6 +192,13 @@ For each solved issue:
        --repository Pilar --org https://dev.azure.com/dips --project DIPS
      ```
 
+     **Post the Pilar PR link back to the GitHub issue** — mandatory for Pilar PRs, so the issue surfaces the cross-system PR alongside Azure DevOps. Capture the PR URL from the `az` response (e.g. `--query 'repository.webUrl'` plus `pullRequestId`, or read it from the JSON output) and comment on the issue:
+     ```bash
+     gh issue comment <number> --repo <owner>/<repo> \
+       --body "Pilar PR: <pr-url>"
+     # Prepend GH_HOST=dips.ghe.com when the issue lives on DIPS GHE.
+     ```
+
    - **agent-platform / DIPS GHE (GitHub):**
      ```bash
      gh pr create --repo <owner>/<repo> --title "<title>" --body "<body>"
