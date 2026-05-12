@@ -61,11 +61,46 @@ For each affected repo, decide the ecosystem and the bump command. Common cases 
 | TYPE column | Ecosystem | Bump approach |
 | --- | --- | --- |
 | `go-module` | Go | `cd <module-dir> && go get <pkg>@<fixed_in> && go mod tidy` (in every directory containing a `go.mod`). Add as explicit indirect requirement if it was transitive. |
-| `npm` | Node | If `pnpm-lock.yaml` exists: `pnpm up <pkg>@<fixed_in>`. Else if `package-lock.json`: `npm install <pkg>@<fixed_in> --package-lock-only`. Else `yarn upgrade <pkg>@<fixed_in>`. |
+| `npm` | Node | See "Transitive npm deps" below — direct `pnpm up` rarely works because almost all Grype findings are transitive. |
 | `python` | Python | Update `pyproject.toml` / `requirements*.txt`; re-lock with `uv lock` / `poetry lock --no-update <pkg>` / `pip-compile` as appropriate. |
 | `java-archive` / `maven` | Java | Update version in `pom.xml` / `build.gradle`. |
 
 If the `fixed_in` version is unavailable on the registry (rare), drop back to the highest available fix version that still resolves all listed advisories. Verify on the registry before failing the run.
+
+### Transitive npm deps (the common case)
+
+In practice almost every Grype npm finding in this org is a **transitive** dependency, so plain `pnpm up <pkg>` / `npm install <pkg>` is a no-op. Use the package manager's override mechanism instead:
+
+- **pnpm** (`pnpm-lock.yaml`): edit `pnpm.overrides` in `package.json`, then `pnpm install`.
+- **npm** (`package-lock.json`): edit top-level `overrides`, then `npm install --package-lock-only`.
+- **yarn classic** (`yarn.lock`): edit top-level `resolutions`, then `yarn install`.
+
+Use **version-scoped selectors** to avoid bumping unrelated copies of the same package across major lines. Examples actually used in this org:
+
+```jsonc
+{
+  "pnpm": {
+    "overrides": {
+      "uuid@>=11.0.0 <11.1.1": "11.1.1",   // only bumps uuid v11 — leaves v9 transitives alone
+      "fast-xml-parser@<5.7.0": "5.7.0",
+      "fast-uri@<3.1.2": "3.1.2",
+      "dompurify@>=3.0.0 <3.4.0": "3.4.0"
+    }
+  }
+}
+```
+
+Without the selector (e.g. `"uuid": ">=11.1.1"`), pnpm will force every uuid resolution — including v8/v9 used by Google SDKs — into a new major, which can break consumers. Always scope by version range when the same package exists at multiple majors in the lockfile (`pnpm why <pkg>` to check).
+
+A direct dep listed in `dependencies` / `devDependencies` should still be bumped directly (edit the version, then install) — overrides are for transitives.
+
+### Multi-package repos
+
+Some repos (e.g. `helen.ai` with `helenai/` + `mcp-server/`) have multiple workspaces with separate lockfiles, and sometimes different package managers per workspace. The Grype scan runs at the repo root and reports findings across all of them.
+
+- Identify every `package.json` / lockfile pair (`find . -maxdepth 3 -name "package.json" -not -path "*/node_modules/*"`).
+- Locate each vulnerable package in the right lockfile (`grep <pkg> <each lockfile>`).
+- Fix each workspace independently with its own override mechanism, then stage all touched lockfiles in a single commit.
 
 ## Step 4: Apply the fix
 
@@ -75,6 +110,14 @@ For each affected repo:
    ```bash
    REPO_DIR=$(mktemp -d)/<repo>
    gh repo clone Techfolk-AS/<repo> "$REPO_DIR"
+   ```
+   If the local clone has uncommitted work, stash it with a tagged name and remember the original branch so you can restore both at the end:
+   ```bash
+   ORIG_BRANCH=$(git -C ~/dev/<repo> branch --show-current)
+   git -C ~/dev/<repo> stash push -u -m "grype-fix-autostash-<YYYY-MM-DD>"
+   # ... do the fix on a fresh branch ...
+   git -C ~/dev/<repo> checkout "$ORIG_BRANCH"
+   git -C ~/dev/<repo> stash pop  # only pops the matching stash if it's still on top
    ```
 2. **Sync main**:
    ```bash
@@ -136,17 +179,45 @@ Print a single summary at the end:
 
 ```
 Grype auto-fix run for <run_id> (<created_at>)
-- doffin-bot: opened #N — bump go.opentelemetry.io/otel/sdk → v1.43.0
-- techfolk-cms: skipped (PR #M already open)
+- webcrm-mcp: opened #3 — bump hono → 4.12.18 (+3 other deps)
+- techfolk-cms: skipped (PR #46 already open)
 - some-repo: FAILED build verification — see logs above
 ```
+
+## Step 7 (optional): Auto-merge mode
+
+**Default: do not merge.** Leave merge to humans.
+
+**Override:** if the user explicitly authorizes merging in the same session ("merge them all", "use my admin rights to merge", "auto-merge with admin", etc.), then after every PR is opened:
+
+1. **Check each PR is green and mergeable:**
+   ```bash
+   gh pr view --repo Techfolk-AS/<repo> <num> \
+     --json mergeable,mergeStateStatus,statusCheckRollup
+   ```
+   `mergeStateStatus` of `CLEAN` is the happy path. `BLOCKED` usually means branch protection — `--admin` overrides it. `BEHIND`, `DIRTY`, or any failing check should stop the merge for that repo; report and move on.
+
+2. **Squash-merge with admin override and delete the branch:**
+   ```bash
+   gh pr merge --repo Techfolk-AS/<repo> <num> --squash --admin --delete-branch
+   ```
+
+3. **Re-trigger the Grype Org Scan** to confirm the fixes worked end-to-end:
+   ```bash
+   gh workflow run "Grype Org Scan" --repo Techfolk-AS/.github
+   # wait for completion:
+   gh run watch <new_run_id> --repo Techfolk-AS/.github --exit-status
+   ```
+   Include the new run's URL and conclusion (success / which repos still failed) in the final report.
+
+Never use `--admin` without an explicit user instruction in the current session.
 
 ## Guardrails
 
 - **Never** commit changes outside the package bump (no formatter sweeps, no unrelated `go mod tidy` reflows from a different Go version unless required by the dep itself).
 - **Never** disable the Grype check, lower `severity-cutoff`, or add suppressions to silence findings — only fix the vulnerable package.
 - If a fix requires a Go directive bump (e.g. otel v1.43 needs Go 1.25), include it but call it out in the PR body. If the repo's deploy target (Cloud Functions runtime, Dockerfile base image) won't support that Go version, **stop and report** rather than ship a fix that breaks deploy.
-- Don't push to `main`. Don't force-push. Don't merge PRs — leave merge to humans.
+- Don't push to `main`. Don't force-push. **Don't merge PRs by default** — see Step 7 for the explicit-authorization path.
 - If credentials or `GITHUB_TOKEN` are missing for any step, surface the error and stop; don't paper over it.
 
 ## Running on a loop locally
