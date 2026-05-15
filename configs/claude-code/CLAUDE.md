@@ -28,3 +28,5 @@ Unless the user explicitly says to commit to the current branch or to main:
 - **Auto-generate descriptive branch names** from the task, using prefixes like `feat/`, `fix/`, `refactor/`, `docs/`, `chore/` (e.g., `feat/add-user-auth`, `fix/login-redirect`).
 - **Commit at logical points** with meaningful messages that explain *why*, not just *what*.
 - Don't squash all changes into a single commit when multiple logical steps are involved.
+
+@RTK.md
