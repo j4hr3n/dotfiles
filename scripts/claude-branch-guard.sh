@@ -9,7 +9,23 @@ command=$(echo "$input" | jq -r '.tool_input.command // empty')
 
 # Block commits directly to main/master
 if echo "$command" | grep -qE '\bgit\s+commit\b'; then
-  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  # Resolve the directory the commit actually runs in: prefer the last `cd <dir>` in
+  # the command (chained with && or ;), or `git -C <dir>`, otherwise use $PWD.
+  target_dir=""
+  cd_target=$(echo "$command" | grep -oE '(^|[;&]|&&)[[:space:]]*cd[[:space:]]+[^[:space:];&|]+' | tail -1 | sed -E 's/^[^c]*cd[[:space:]]+//')
+  git_c_target=$(echo "$command" | grep -oE '\bgit[[:space:]]+-C[[:space:]]+[^[:space:]]+' | tail -1 | awk '{print $NF}')
+  if [ -n "$git_c_target" ]; then
+    target_dir="$git_c_target"
+  elif [ -n "$cd_target" ]; then
+    target_dir="$cd_target"
+  fi
+  # Expand ~ if present
+  target_dir="${target_dir/#\~/$HOME}"
+  if [ -n "$target_dir" ] && [ -d "$target_dir" ]; then
+    branch=$(git -C "$target_dir" rev-parse --abbrev-ref HEAD 2>/dev/null)
+  else
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  fi
   if [ "$branch" = "main" ] || [ "$branch" = "master" ]; then
     echo "Blocked: committing directly to $branch. Create a feature branch first." >&2
     exit 2
