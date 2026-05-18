@@ -32,9 +32,20 @@ if echo "$command" | grep -qE '\bgit\s+commit\b'; then
   fi
 fi
 
-# Block force pushes
+# Block force pushes — except when the agent has obtained explicit user
+# approval (via AskUserQuestion) and re-runs the push with
+# CLAUDE_ALLOW_FORCE_PUSH=1 set inline. Refuse force-pushes to main/master
+# even with the opt-in.
 if echo "$command" | grep -qE '\bgit\s+push\b.*(-f|--force)\b'; then
+  if echo "$command" | grep -qE '\bgit\s+push\b.*\b(main|master)\b'; then
+    echo "Blocked: force push to main/master is never allowed." >&2
+    exit 2
+  fi
+  if echo "$command" | grep -qE '\bCLAUDE_ALLOW_FORCE_PUSH=1\b'; then
+    exit 0
+  fi
   echo "Blocked: force push requires explicit user approval." >&2
+  echo "After approval, prefix the command with CLAUDE_ALLOW_FORCE_PUSH=1 to opt in." >&2
   exit 2
 fi
 
