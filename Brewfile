@@ -5,6 +5,7 @@ brew "jq"
 brew "mas"
 brew "yq"
 brew "lolcat"
+brew "rtk"
 
 # Node
 brew "fnm"
@@ -29,4 +30,7 @@ cask "ghostty"
 cask "1password"
 cask "cursor"
 cask "appcleaner"
-cask "claude-code"
+cask "codex"
+cask "t3-code"
+# Claude Code is installed via the native installer in setup-mac.sh
+# (curl -fsSL https://claude.ai/install.sh | bash) — the cask breaks auto-updates.
