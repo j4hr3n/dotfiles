@@ -52,10 +52,15 @@ For each failed `Scan:` job, classify it before parsing. Look at which step fail
 ```bash
 # NB: if a CLI proxy mangles `--job`/`--log-failed`, run the raw command (e.g. `rtk proxy gh ...`).
 gh run view --log-failed --job <job_id> --repo Techfolk-AS/.github 2>&1 \
-  | grep -iE "GHSA-|CVE-|error installing grype|failed to install|HTTP status=[45][0-9][0-9]|could not resolve|rate limit|checkout|fatal:" \
+  | grep -iE "Vulnerabilities found|Grype tooling failure|NOT a vulnerability finding|GHSA-|CVE-|error installing grype|failed to install|HTTP status=[45][0-9][0-9]|could not resolve|rate limit|checkout|fatal:" \
   | sort -u
 ```
 
+**Fast path — the workflow self-classifies.** As of the classify-failure change, `grype.yml` emits an explicit annotation on the failing step:
+- `::error title=Vulnerabilities found::…` → **vuln finding**. Proceed to Step 2.
+- `::error title=Grype tooling failure::…` (text includes *"NOT a vulnerability finding"*) → **workflow failure**. Skip; record as `infra-failure`.
+
+If those annotations are absent (older run, or a failure outside the Grype step), fall back to the signals:
 - The failed step is **`Run Grype`** *and* the log contains a results table (rows with `GHSA-`/`CVE-` and a `Fixed in` column) → **vuln finding**. Proceed to Step 2.
 - The failed step is the Grype install/setup, or the log shows `error installing grype` / `failed to install` / `HTTP status=5xx`/`4xx` / checkout or runner errors / network or rate-limit messages, and **no results table** → **workflow failure**. Do **not** open a PR. Record it as `infra-failure` for the report.
 
