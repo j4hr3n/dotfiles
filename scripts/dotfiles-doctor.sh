@@ -25,7 +25,6 @@ SYMLINKS=(
     "$HOME/.claude/CLAUDE.md|configs/claude-code/CLAUDE.md"
     "$HOME/.claude/settings.json|configs/claude-code/settings.json"
     "$HOME/.claude/skills|configs/claude-code/skills"
-    "$HOME/.claude/SKILL.md|configs/claude-code/SKILL.md"
     "$HOME/.claude/statusline-command.sh|configs/claude-code/statusline-command.sh"
 )
 
@@ -55,12 +54,13 @@ done
 echo ""
 echo "Checking Homebrew packages..."
 
-if brew bundle check --file="$DOTFILES_DIR/Brewfile" &>/dev/null; then
+# NO_UPGRADE: check presence only — outdated formulae are not "missing"
+if HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --file="$DOTFILES_DIR/Brewfile" &>/dev/null; then
     echo -e "  ${GREEN}OK${NC}     All Brewfile entries installed"
     ((PASS++))
 else
     echo -e "  ${YELLOW}DRIFT${NC}  Missing packages:"
-    brew bundle check --file="$DOTFILES_DIR/Brewfile" 2>&1 | sed 's/^/         /'
+    HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --verbose --file="$DOTFILES_DIR/Brewfile" 2>&1 | grep -v '^Satisfied' | sed 's/^/         /'
     ((WARN++))
 fi
 

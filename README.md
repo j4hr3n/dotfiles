@@ -18,7 +18,7 @@ Run the setup script directly from the repository:
 
 ```bash
 # If you've already cloned the repo
-cd ~/dotfiles
+cd ~/dev/dotfiles
 ./setup-mac.sh
 
 # Or download and run in one command
@@ -34,8 +34,8 @@ If you prefer to set up manually:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/j4hr3n/dotfiles.git ~/dotfiles
-   cd ~/dotfiles
+   git clone https://github.com/j4hr3n/dotfiles.git ~/dev/dotfiles
+   cd ~/dev/dotfiles
    ```
 
 2. Run the setup script:
@@ -45,10 +45,12 @@ If you prefer to set up manually:
 
 ## What Gets Installed
 
-- **Shell**: zsh with oh-my-zsh and custom aliases
+- **Shell**: zsh with oh-my-zsh, custom aliases, tmux
 - **Terminal**: Ghostty configuration
-- **Development Tools**: Git, Node.js (via fnm), GitHub CLI
-- **Applications**: Arc, Cursor, Figma, Notion, Raycast, Slack, Spotify, 1Password, and more
+- **Development Tools**: Git, GitHub CLI, Node.js (via fnm), pnpm, Bun, Go, uv, Docker (via colima), Azure/Google Cloud CLIs
+- **Security Tools**: gitleaks, trufflehog, grype, trivy, agent-browser
+- **AI Tools**: Claude Code (with synced config, skills, and hooks), opencode, Codex, rtk
+- **Applications**: Arc, Cursor, VS Code, Figma, Notion, Raycast, Slack, Spotify, 1Password, and more
 - **Utilities**: fzf, jq, yq, fx, and other productivity tools
 
 See `Brewfile` for the complete list of packages and applications.
