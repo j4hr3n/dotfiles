@@ -44,6 +44,15 @@
             "command": "bash ~/dev/dotfiles/scripts/claude-branch-guard.sh"
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          }
+        ]
       }
     ]
   },
