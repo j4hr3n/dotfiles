@@ -5,17 +5,40 @@ tap "homebrew/brew-vulns"
 
 # Productivity tools
 brew "fx"
+brew "fzf"
 brew "git"
 brew "homebrew/brew-vulns/brew-vulns"
 brew "jq"
-brew "mas"
+brew "rtk"
 brew "yq"
 brew "lolcat"
 
-# Node
+# Languages & runtimes
+brew "bun"
 brew "fnm"
+brew "go"
+brew "pnpm"
+brew "uv"
+
+# Containers
+brew "colima"
+brew "docker"
+brew "docker-buildx"
+brew "docker-compose"
+
+# Cloud CLIs
+brew "azure-cli"
+
+# Security tools (skill dependencies)
+brew "agent-browser"
+brew "bats-core"
+brew "gitleaks"
+brew "grype"
+brew "trivy"
+brew "trufflehog"
 
 # Shell tools
+brew "tmux"
 brew "zsh"
 brew "zsh-completions"
 brew "zsh-autosuggestions"
@@ -39,3 +62,8 @@ cask "1password"
 cask "cursor"
 cask "appcleaner"
 cask "claude-code"
+cask "codex"
+cask "gcloud-cli"
+cask "opencode-desktop"
+cask "t3-code"
+cask "visual-studio-code"
