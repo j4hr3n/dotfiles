@@ -74,6 +74,23 @@ else
     ((PASS++))
 fi
 
+# --- Vulnerability check (brew vulns, via homebrew/vulns tap) ---
+echo ""
+echo "Checking for vulnerable packages..."
+
+if brew vulns --help &>/dev/null; then
+    if vulns=$(brew vulns 2>/dev/null); then
+        echo -e "  ${GREEN}OK${NC}     No known vulnerabilities in installed packages"
+        ((PASS++))
+    else
+        echo -e "  ${YELLOW}VULNS${NC}  Vulnerable packages found:"
+        echo "$vulns" | grep -v '^Checking ' | sed '/^$/d; s/^/         /'
+        ((WARN++))
+    fi
+else
+    echo -e "  ${YELLOW}SKIP${NC}   brew vulns not available (run: brew install homebrew/brew-vulns/brew-vulns)"
+fi
+
 # --- Summary ---
 echo ""
 echo "=========================================="

@@ -19,6 +19,7 @@
 
 - Use `pnpm dlx` instead of `npx` for running package binaries (e.g., `pnpm dlx vitest`, `pnpm dlx @biomejs/biome check`).
 - `pnpm`, `pnpm dlx`, `turbo`, `vitest`, `biome`, `git`, `gh`, and `az` commands should be treated as safe to run without manual approval.
+- For raw `gh api` calls against a GitHub Enterprise host (e.g. `dips.ghe.com`), set `GH_HOST=<host>` — auto-detection only works for higher-level `gh pr/repo/run` subcommands. Example: `GH_HOST=dips.ghe.com gh api repos/owner/repo/pulls/N/comments`.
 
 ## Branch and commit workflow
 
@@ -28,5 +29,6 @@ Unless the user explicitly says to commit to the current branch or to main:
 - **Auto-generate descriptive branch names** from the task, using prefixes like `feat/`, `fix/`, `refactor/`, `docs/`, `chore/` (e.g., `feat/add-user-auth`, `fix/login-redirect`).
 - **Commit at logical points** with meaningful messages that explain *why*, not just *what*.
 - Don't squash all changes into a single commit when multiple logical steps are involved.
+- **Never delete a remote branch that has an open PR** (`git push origin :branch`). GitHub auto-closes the PR and the head ref becomes orphaned, so the PR can't be reopened. If you need to rewrite history and force-push is blocked by hooks, ask the user before deleting; otherwise push to a new branch and open a replacement PR.
 
 @RTK.md

@@ -40,6 +40,34 @@ gh run view <run_id> --repo Techfolk-AS/.github --json jobs \
 
 The repo name is the suffix after `Scan: `.
 
+## Step 1.5: Triage — real vuln finding vs. workflow failure
+
+**A failed job does not mean the repo has vulnerabilities.** The job can fail for two fundamentally different reasons, and only one of them is yours to fix:
+
+1. **Vuln finding** — Grype installed, scanned, found high/critical fixable vulns, and `fail-build: true` failed the step. *This is what you fix (Steps 2–7).*
+2. **Workflow/infra failure** — the job died before Grype ever produced findings: the binary install 504'd, checkout failed, the runner errored, a rate limit hit, etc. *There is nothing to bump. Opening a dependency PR here would be wrong.*
+
+For each failed `Scan:` job, classify it before parsing. Look at which step failed and grep the failed-step log for telltales:
+
+```bash
+# NB: if a CLI proxy mangles `--job`/`--log-failed`, run the raw command (e.g. `rtk proxy gh ...`).
+gh run view --log-failed --job <job_id> --repo Techfolk-AS/.github 2>&1 \
+  | grep -iE "Vulnerabilities found|Grype tooling failure|NOT a vulnerability finding|GHSA-|CVE-|error installing grype|failed to install|HTTP status=[45][0-9][0-9]|could not resolve|rate limit|checkout|fatal:" \
+  | sort -u
+```
+
+**Fast path — the workflow self-classifies.** As of the classify-failure change, `grype.yml` emits an explicit annotation on the failing step:
+- `::error title=Vulnerabilities found::…` → **vuln finding**. Proceed to Step 2.
+- `::error title=Grype tooling failure::…` (text includes *"NOT a vulnerability finding"*) → **workflow failure**. Skip; record as `infra-failure`.
+
+If those annotations are absent (older run, or a failure outside the Grype step), fall back to the signals:
+- The failed step is **`Run Grype`** *and* the log contains a results table (rows with `GHSA-`/`CVE-` and a `Fixed in` column) → **vuln finding**. Proceed to Step 2.
+- The failed step is the Grype install/setup, or the log shows `error installing grype` / `failed to install` / `HTTP status=5xx`/`4xx` / checkout or runner errors / network or rate-limit messages, and **no results table** → **workflow failure**. Do **not** open a PR. Record it as `infra-failure` for the report.
+
+A whole-org pattern is the giveaway: if **every** failing repo shows the *same* error at the *same* step (e.g. all 7 hit `HTTP status=504` installing grype v0.110.0 at the same minute), it's a transient infrastructure blip, not a sudden org-wide vulnerability. The remediation is to **re-run the workflow** (`gh workflow run "Grype Org Scan" --repo Techfolk-AS/.github`), not to touch any repo. If re-running clears it, report success. If the same install/network failure recurs across runs, the durable fix is in the workflow itself (pin/cache the Grype binary, add install retries) — surface that as a recommendation; don't paper over it and don't bump dependencies to "fix" it.
+
+If **all** failing jobs are workflow failures, there is nothing to fix in any repo: skip Steps 2–7 entirely and go straight to the final report (Step 6), re-running the workflow if appropriate. Only the subset of jobs classified as **vuln findings** continues to Step 2.
+
 ## Step 2: Extract vulnerabilities per repo
 
 For each failing job, pull only the Grype output table from the log:
@@ -175,14 +203,17 @@ If a matching open PR exists, skip and note it in the final report instead.
 
 ## Step 6: Final report
 
-Print a single summary at the end:
+Print a single summary at the end. **Always state up front whether failures were real vuln findings or workflow/infra failures** — never let an infra failure read as "fixed vulnerabilities". Mark each repo with its triage class from Step 1.5:
 
 ```
 Grype auto-fix run for <run_id> (<created_at>)
-- webcrm-mcp: opened #3 — bump hono → 4.12.18 (+3 other deps)
-- techfolk-cms: skipped (PR #46 already open)
-- some-repo: FAILED build verification — see logs above
+- webcrm-mcp:  [vuln]  opened #3 — bump hono → 4.12.18 (+3 other deps)
+- techfolk-cms: [vuln]  skipped (PR #46 already open)
+- some-repo:    [vuln]  FAILED build verification — see logs above
+- doffin-bot:   [infra] grype install HTTP 504 — no vulns; re-ran workflow (run <new_id>)
 ```
+
+If the whole run was an infra blip, say so plainly — e.g. "No vulnerabilities found. All 7 jobs failed installing the Grype binary (HTTP 504); re-triggered the scan as run `<new_id>`." Don't open or imply PRs that don't exist.
 
 ## Step 7 (optional): Auto-merge mode
 
