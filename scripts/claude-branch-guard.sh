@@ -9,16 +9,43 @@ command=$(echo "$input" | jq -r '.tool_input.command // empty')
 
 # Block commits directly to main/master
 if echo "$command" | grep -qE '\bgit\s+commit\b'; then
-  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  # Resolve the directory the commit actually runs in: prefer the last `cd <dir>` in
+  # the command (chained with && or ;), or `git -C <dir>`, otherwise use $PWD.
+  target_dir=""
+  cd_target=$(echo "$command" | grep -oE '(^|[;&]|&&)[[:space:]]*cd[[:space:]]+[^[:space:];&|]+' | tail -1 | sed -E 's/^[^c]*cd[[:space:]]+//')
+  git_c_target=$(echo "$command" | grep -oE '\bgit[[:space:]]+-C[[:space:]]+[^[:space:]]+' | tail -1 | awk '{print $NF}')
+  if [ -n "$git_c_target" ]; then
+    target_dir="$git_c_target"
+  elif [ -n "$cd_target" ]; then
+    target_dir="$cd_target"
+  fi
+  # Expand ~ if present
+  target_dir="${target_dir/#\~/$HOME}"
+  if [ -n "$target_dir" ] && [ -d "$target_dir" ]; then
+    branch=$(git -C "$target_dir" rev-parse --abbrev-ref HEAD 2>/dev/null)
+  else
+    branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  fi
   if [ "$branch" = "main" ] || [ "$branch" = "master" ]; then
     echo "Blocked: committing directly to $branch. Create a feature branch first." >&2
     exit 2
   fi
 fi
 
-# Block force pushes
+# Block force pushes — except when the agent has obtained explicit user
+# approval (via AskUserQuestion) and re-runs the push with
+# CLAUDE_ALLOW_FORCE_PUSH=1 set inline. Refuse force-pushes to main/master
+# even with the opt-in.
 if echo "$command" | grep -qE '\bgit\s+push\b.*(-f|--force)\b'; then
+  if echo "$command" | grep -qE '\bgit\s+push\b.*\b(main|master)\b'; then
+    echo "Blocked: force push to main/master is never allowed." >&2
+    exit 2
+  fi
+  if echo "$command" | grep -qE '\bCLAUDE_ALLOW_FORCE_PUSH=1\b'; then
+    exit 0
+  fi
   echo "Blocked: force push requires explicit user approval." >&2
+  echo "After approval, prefix the command with CLAUDE_ALLOW_FORCE_PUSH=1 to opt in." >&2
   exit 2
 fi
 

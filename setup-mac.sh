@@ -228,6 +228,17 @@ create_symlink "~/.vimrc" "shell/.vimrc"
 create_symlink "~/Brewfile" "Brewfile"
 create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "configs/ghostty/config"
 
+# Install Claude Code via the official native installer
+# (Homebrew cask breaks auto-updates — use the upstream installer instead)
+print_info "Checking for Claude Code..."
+if ! command -v claude &>/dev/null; then
+    print_info "Installing Claude Code via native installer..."
+    curl -fsSL https://claude.ai/install.sh | bash
+    print_result $? "Claude Code installed"
+else
+    print_result 0 "Claude Code already installed: $(claude --version 2>/dev/null || echo present)"
+fi
+
 # Claude Code config
 print_info "Setting up Claude Code config..."
 mkdir -p "$HOME/.claude"

@@ -61,9 +61,10 @@ cask "ghostty"
 cask "1password"
 cask "cursor"
 cask "appcleaner"
-cask "claude-code"
 cask "codex"
 cask "gcloud-cli"
 cask "opencode-desktop"
 cask "t3-code"
 cask "visual-studio-code"
+# Claude Code is installed via the native installer in setup-mac.sh
+# (curl -fsSL https://claude.ai/install.sh | bash) — the cask breaks auto-updates.

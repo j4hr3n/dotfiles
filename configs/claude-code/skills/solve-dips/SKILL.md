@@ -187,6 +187,15 @@ For each solved issue:
    git push -u origin <branch-name>
    ```
 
+   > **Azure DevOps push fails with `fatal: could not read Password for 'https://dips@dev.azure.com': Device not configured`?** macOS keychain has no PAT stored. `pnpm azure-login` only authenticates `az` and Docker ACR — it does **not** set up git credentials. Fallback using an AAD bearer token (`az` must be logged in):
+   >
+   > ```bash
+   > AZ_TOKEN=$(az account get-access-token --resource 499b84ac-1321-427f-aa17-267ca6975798 --query accessToken -o tsv)
+   > git -c http.extraHeader="Authorization: Bearer $AZ_TOKEN" push -u origin <branch-name>
+   > ```
+   >
+   > The resource ID is Azure DevOps' fixed AAD app ID. Use this once per session, or store a PAT in keychain for a permanent fix.
+
 2. **Create PR:**
 
    - **Pilar (GitHub Enterprise — `dips/Pilar` on `dips.ghe.com`):**
