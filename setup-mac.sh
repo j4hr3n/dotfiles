@@ -164,9 +164,10 @@ if [ -f "$SCRIPT_DIR/Brewfile" ] && [ -f "$SCRIPT_DIR/shell/.zshrc" ]; then
     DOTFILES_DIR="$SCRIPT_DIR"
     print_result 0 "Running from existing dotfiles repository: $DOTFILES_DIR"
 else
-    DOTFILES_DIR="$HOME/dotfiles"
+    DOTFILES_DIR="$HOME/dev/dotfiles"
     if [ ! -d "$DOTFILES_DIR" ]; then
         print_info "Cloning dotfiles repository..."
+        mkdir -p "$HOME/dev"
         git clone https://github.com/j4hr3n/dotfiles.git "$DOTFILES_DIR"
         print_result $? "Dotfiles repository cloned"
     else
@@ -244,13 +245,12 @@ mkdir -p "$HOME/.claude"
 create_symlink "~/.claude/CLAUDE.md" "configs/claude-code/CLAUDE.md"
 create_symlink "~/.claude/settings.json" "configs/claude-code/settings.json"
 create_symlink "~/.claude/skills" "configs/claude-code/skills"
-create_symlink "~/.claude/SKILL.md" "configs/claude-code/SKILL.md"
 create_symlink "~/.claude/statusline-command.sh" "configs/claude-code/statusline-command.sh"
 
 # Install Claude Code plugins (installed_plugins.json has machine-local paths, so we install via CLI)
 if command -v claude &> /dev/null; then
   print_info "Installing Claude Code plugins..."
-  for plugin in frontend-design code-review typescript-lsp playwright figma claude-code-setup slack skill-creator code-simplifier superpowers; do
+  for plugin in frontend-design figma claude-code-setup skill-creator posthog github typescript-lsp; do
     claude plugins install "${plugin}@claude-plugins-official" 2>/dev/null || true
   done
 fi
@@ -283,5 +283,9 @@ echo ""
 print_info "Next steps:"
 echo "  1. Restart your terminal or run: source ~/.zshrc"
 echo "  2. Configure any additional applications as needed"
+echo "  3. Claude Code marketplaces reference local repos not cloned by this script:"
+echo "       ~/dev/dips-marketplace (dips-marketplace)"
+echo "       ~/dev/secure-agent-playbook (agent-security-playbook)"
+echo "     Clone them manually if you need those plugins."
 echo ""
 

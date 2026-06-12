@@ -1,4 +1,3 @@
 Brewfile.lock.json
-logs/**
-git/**
-claude/settings.local.json
+.claude/settings.local.json
+configs/claude-code/skills/*-workspace/

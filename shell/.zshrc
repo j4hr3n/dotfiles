@@ -58,7 +58,10 @@ fi
 
 eval "$(fnm env --use-on-cd --shell zsh)"
 
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# fzf keybindings and completion
+command -v fzf &>/dev/null && source <(fzf --zsh)
 
 # bun completions
 [ -s "/Users/christofferjahren/.bun/_bun" ] && source "/Users/christofferjahren/.bun/_bun"
@@ -66,3 +69,10 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Add ~/bin to PATH (claude-mesh, cmesh)
+export PATH="$HOME/bin:$PATH"
+
+# Add Go bin to PATH (tea, other go-installed CLIs)
+export PATH="$HOME/go/bin:$PATH"
+export PATH="$PATH:$HOME/.jfrog/bin"
