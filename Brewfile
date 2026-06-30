@@ -4,16 +4,22 @@ tap "buo/cask-upgrade", trusted: true
 tap "homebrew/brew-vulns"
 
 # Productivity tools
+brew "cloc"
+brew "coreutils"
+brew "findutils"
 brew "fx"
 brew "fzf"
 brew "git"
+brew "gnu-sed"
 brew "homebrew/brew-vulns/brew-vulns"
 brew "jq"
+brew "mas"
 brew "rtk"
 brew "yq"
 brew "lolcat"
 
 # Languages & runtimes
+brew "asdf"
 brew "bun"
 brew "fnm"
 brew "go"
@@ -28,16 +34,22 @@ brew "docker-compose"
 
 # Cloud CLIs
 brew "azure-cli"
+brew "flyctl"
 
 # Security tools (skill dependencies)
 brew "agent-browser"
 brew "bats-core"
 brew "gitleaks"
 brew "grype"
+brew "jadx"
+brew "pandoc"
+brew "poppler"
 brew "trivy"
 brew "trufflehog"
 
 # Shell tools
+brew "bash"
+brew "bash-completion@2"
 brew "tmux"
 brew "zsh"
 brew "zsh-completions"
@@ -66,5 +78,14 @@ cask "gcloud-cli"
 cask "opencode-desktop"
 cask "t3-code"
 cask "visual-studio-code"
+cask "vscodium"
 # Claude Code is installed via the native installer in setup-mac.sh
 # (curl -fsSL https://claude.ai/install.sh | bash) — the cask breaks auto-updates.
+
+# Mac App Store
+mas "iMovie", id: 408981434
+mas "Keynote", id: 409183694
+mas "Pages", id: 409201541
+mas "Numbers", id: 409203825
+mas "Xcode", id: 497799835
+mas "Jojo", id: 1659864300
