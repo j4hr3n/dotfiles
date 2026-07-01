@@ -231,6 +231,7 @@ create_symlink "~/Library/Application Support/com.mitchellh.ghostty/config" "con
 # Install Claude Code via the official native installer
 # (Homebrew cask breaks auto-updates — use the upstream installer instead)
 print_info "Checking for Claude Code..."
+export PATH="$HOME/.local/bin:$PATH"
 if ! command -v claude &>/dev/null; then
     print_info "Installing Claude Code via native installer..."
     curl -fsSL https://claude.ai/install.sh | bash
@@ -288,4 +289,3 @@ echo "       ~/dev/dips-marketplace (dips-marketplace)"
 echo "       ~/dev/secure-agent-playbook (agent-security-playbook)"
 echo "     Clone them manually if you need those plugins."
 echo ""
-

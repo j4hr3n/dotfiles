@@ -76,3 +76,6 @@ export PATH="$HOME/bin:$PATH"
 # Add Go bin to PATH (tea, other go-installed CLIs)
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$PATH:$HOME/.jfrog/bin"
+
+# Native installers such as Claude Code place binaries here.
+export PATH="$HOME/.local/bin:$PATH"
