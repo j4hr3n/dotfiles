@@ -58,7 +58,8 @@
     "skill-creator@claude-plugins-official": true,
     "posthog@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "typescript-lsp@claude-plugins-official": true
+    "typescript-lsp@claude-plugins-official": true,
+    "ponytail@ponytail": true
   },
   "extraKnownMarketplaces": {
     "agent-security-playbook": {
@@ -71,6 +72,12 @@
       "source": {
         "source": "git",
         "url": "git@codeberg.org:Techfolk/techfolk-claude-code-marketplace.git"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
       }
     }
   },
