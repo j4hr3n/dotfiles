@@ -8,10 +8,10 @@
 input=$(cat)
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 
-case "$cmd" in
-  *"gh pr create"*) ;;
-  *) exit 0 ;;
-esac
+# Match `gh pr create` only in command position (start of line or after ; & | (),
+# optionally prefixed by env assignments or the rtk wrapper) so the phrase inside
+# a commit message or echo string doesn't trigger a false positive.
+printf '%s\n' "$cmd" | grep -qE '(^|[;&|(] *)([A-Za-z_]+=[^ ]* +)*(rtk +)?gh +pr +create' || exit 0
 
 # Skip draft PRs (--draft or -d)
 printf '%s' "$cmd" | grep -qE -- '(^| )--draft( |=|$)| -d( |$)' && exit 0
