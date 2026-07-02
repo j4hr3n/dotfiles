@@ -49,6 +49,18 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dev/dotfiles/scripts/claude-pr-slack-notify.sh",
+            "timeout": 15
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
