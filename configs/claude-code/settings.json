@@ -61,6 +61,17 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/dev/dotfiles/scripts/claude-unslop-reminder.sh"
+          }
+        ]
+      }
     ]
   },
   "enabledPlugins": {
