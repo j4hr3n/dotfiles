@@ -1,3 +1,8 @@
+---
+name: review
+description: Review a pull request as a senior developer, catching real problems without noise. Use when the user runs /review, asks to review or check a PR, or provides a GitHub or Azure DevOps PR URL or number.
+---
+
 # /review — Review a pull request
 
 ## Trigger

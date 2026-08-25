@@ -1,3 +1,8 @@
+---
+name: retro
+description: Review the current session and propose improvements to skills and configuration so future sessions go smoother. Use when the user runs /retro or asks for a session retrospective.
+---
+
 # /retro — Improve skills and config after a work session
 
 ## Trigger

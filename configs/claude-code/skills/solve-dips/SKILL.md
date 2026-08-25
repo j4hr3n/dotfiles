@@ -1,3 +1,8 @@
+---
+name: solve-dips
+description: Solve DIPS GitHub issues end-to-end, from reading the issue through implementation and PR. Use when the user runs /solve with issue numbers or says things like "solve issue 42", "work on #42", or "fix #42 and #43".
+---
+
 # /solve-dips — Solve DIPS GitHub issues end-to-end
 
 ## Trigger
