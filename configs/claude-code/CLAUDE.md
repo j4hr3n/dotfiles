@@ -30,5 +30,3 @@ Unless the user explicitly says to commit to the current branch or to main:
 - **Commit at logical points** with meaningful messages that explain *why*, not just *what*.
 - Don't squash all changes into a single commit when multiple logical steps are involved.
 - **Never delete a remote branch that has an open PR** (`git push origin :branch`). GitHub auto-closes the PR and the head ref becomes orphaned, so the PR can't be reopened. If you need to rewrite history and force-push is blocked by hooks, ask the user before deleting; otherwise push to a new branch and open a replacement PR.
-
-@RTK.md
