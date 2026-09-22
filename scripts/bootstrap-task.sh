@@ -42,7 +42,7 @@ fi
 # --- oh-my-zsh ---
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     echo "→ Installing oh-my-zsh..."
-    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    KEEP_ZSHRC=yes RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     echo "✓ oh-my-zsh installed"
 else
     echo "✓ oh-my-zsh already installed"
@@ -66,5 +66,9 @@ if command -v claude &>/dev/null; then
     done
     echo "✓ Claude Code plugins installed"
 fi
+
+# The bootstrap project's mise.toml is not loaded from ordinary working
+# directories. Keep these global defaults in sync with its [tools] section.
+mise use --global node@lts go@latest uv@latest bun@latest pnpm@latest
 
 echo "✓ bootstrap task done"

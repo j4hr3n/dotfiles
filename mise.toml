@@ -2,12 +2,15 @@
 #
 # New machine (Apple Silicon Mac):
 #   curl https://mise.run | sh
-#   export PATH="$HOME/.local/bin:$PATH"
-#   mise bootstrap --from git@github.com:j4hr3n/dotfiles.git
+#   export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.local/bin:$PATH"
+#   mkdir -p "$HOME/dev"
+#   mise bootstrap --from https://github.com/j4hr3n/dotfiles.git --from-dir "$HOME/dev/dotfiles"
 #
 # Intel Macs: mise's brew manager is Apple Silicon only — use setup-mac.sh there.
 
 # Versioned dev tools managed by mise (replaces brew's fnm/asdf/go/bun/pnpm/uv).
+# scripts/bootstrap-task.sh also writes these as global defaults, so they are
+# active in shells outside this bootstrap project checkout.
 [tools]
 node = "lts"
 go = "latest"
