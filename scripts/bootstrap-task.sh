@@ -4,7 +4,7 @@
 # step is idempotent. Mirrors the corresponding parts of setup-mac.sh.
 set -euo pipefail
 
-# --- Xcode Command Line Tools (provides git, needed by the repos phase) ---
+# --- Xcode Command Line Tools (compiler and SDK support) ---
 if ! xcode-select --print-path &>/dev/null; then
     echo "→ Xcode Command Line Tools not found. Installing (approve the GUI dialog)..."
     xcode-select --install
