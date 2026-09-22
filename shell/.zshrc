@@ -56,7 +56,12 @@ if [[ "$OSTYPE" =~ ^darwin ]]; then
     eval $(/opt/homebrew/bin/brew shellenv)
 fi
 
-eval "$(fnm env --use-on-cd --shell zsh)"
+# Dev tools are managed by mise when present; falls back to fnm otherwise.
+if command -v mise &>/dev/null; then
+    eval "$(mise activate zsh)"
+else
+    eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 

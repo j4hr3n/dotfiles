@@ -1,0 +1,119 @@
+# Machine setup, applied with `mise bootstrap` — https://mise.jdx.dev/bootstrap.html
+#
+# New machine (Apple Silicon Mac):
+#   curl https://mise.run | sh
+#   export PATH="$HOME/.local/bin:$PATH"
+#   mise bootstrap --from git@github.com:j4hr3n/dotfiles.git
+#
+# Intel Macs: mise's brew manager is Apple Silicon only — use setup-mac.sh there.
+
+# Versioned dev tools managed by mise (replaces brew's fnm/asdf/go/bun/pnpm/uv).
+[tools]
+node = "lts"
+go = "latest"
+uv = "latest"
+bun = "latest"
+pnpm = "latest"
+
+# Third-party taps mise needs metadata from. mise pours bottles directly into
+# /opt/homebrew without installing Homebrew itself, and coexists with a real
+# Homebrew install. buo/cask-upgrade is dropped: mise's `packages upgrade`
+# replaces `brew cu`. (The Brewfile's homebrew/brew-vulns tap has no formulae
+# and brew-vulns was never installed — dropped here.)
+[bootstrap.brew.taps]
+"anomalyco/tap" = "https://github.com/anomalyco/homebrew-tap.git"
+
+[bootstrap.packages]
+# Productivity tools
+"brew:cloc" = "latest"
+"brew:coreutils" = "latest"
+"brew:findutils" = "latest"
+"brew:fx" = "latest"
+"brew:fzf" = "latest"
+"brew:git" = "latest"
+"brew:gnu-sed" = "latest"
+"brew:jq" = "latest"
+"brew:mas" = "latest"
+"brew:rtk" = "latest"
+"brew:yq" = "latest"
+"brew:lolcat" = "latest"
+
+# Containers
+"brew:colima" = "latest"
+"brew:docker" = "latest"
+"brew:docker-buildx" = "latest"
+"brew:docker-compose" = "latest"
+
+# Security tools (skill dependencies)
+"brew:agent-browser" = "latest"
+"brew:bats-core" = "latest"
+"brew:gitleaks" = "latest"
+"brew:grype" = "latest"
+"brew:jadx" = "latest"
+"brew:pandoc" = "latest"
+"brew:poppler" = "latest"
+"brew:trivy" = "latest"
+"brew:trufflehog" = "latest"
+
+# Shell tools
+"brew:bash" = "latest"
+"brew:bash-completion@2" = "latest"
+"brew:tmux" = "latest"
+"brew:zsh" = "latest"
+"brew:zsh-completions" = "latest"
+"brew:zsh-autosuggestions" = "latest"
+"brew:zsh-syntax-highlighting" = "latest"
+
+# GitHub CLI
+"brew:gh" = "latest"
+
+# AI tools
+"brew:anomalyco/tap/opencode" = "latest"
+
+# GUI apps. Some casks may use artifact types mise doesn't support yet —
+# check with: mise bootstrap packages apply --manager brew-cask --dry-run
+"brew-cask:figma" = "latest"
+"brew-cask:notion" = "latest"
+"brew-cask:raycast" = "latest"
+"brew-cask:slack" = "latest"
+"brew-cask:spotify" = "latest"
+"brew-cask:arc" = "latest"
+"brew-cask:ghostty" = "latest"
+"brew-cask:1password" = "latest"
+"brew-cask:cursor" = "latest"
+"brew-cask:appcleaner" = "latest"
+"brew-cask:codex" = "latest"
+"brew-cask:gcloud-cli" = "latest"
+"brew-cask:opencode-desktop" = "latest"
+"brew-cask:t3-code" = "latest"
+"brew-cask:visual-studio-code" = "latest"
+"brew-cask:supacode" = "latest"
+
+# Mac App Store (mas CLI comes from brew:mas above; needs /opt/homebrew/bin on PATH)
+"mas:497799835" = "latest" # Xcode
+"mas:1659864300" = "latest" # Jojo
+
+# Claude Code is installed via the native installer in scripts/bootstrap-task.sh
+# (the cask breaks auto-updates).
+
+# Shell/app configs, symlinked into place (replaces create_symlink in setup-mac.sh).
+[dotfiles]
+"~/.zshrc" = "shell/.zshrc"
+"~/.zsh_aliases" = "shell/.zsh_aliases"
+"~/.vimrc" = "shell/.vimrc"
+"~/Library/Application Support/com.mitchellh.ghostty/config" = { source = "configs/ghostty/config", mode = "symlink" }
+"~/.claude/CLAUDE.md" = "configs/claude-code/CLAUDE.md"
+"~/.claude/settings.json" = "configs/claude-code/settings.json"
+"~/.claude/skills" = "configs/claude-code/skills"
+"~/.claude/statusline-command.sh" = "configs/claude-code/statusline-command.sh"
+
+# Once the zshrc block in shell/.zshrc is dropped, mise can own activation instead:
+# [bootstrap.mise_shell_activate]
+# zprofile = "shims"
+# zshrc = "activate"
+
+# Imperative steps that don't fit declarative sections (Xcode CLT, git identity,
+# oh-my-zsh, Claude Code). Idempotent — runs on every bootstrap.
+[tasks.bootstrap]
+description = "Xcode CLT, git identity, oh-my-zsh, Claude Code"
+run = "bash scripts/bootstrap-task.sh"

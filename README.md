@@ -43,6 +43,40 @@ If you prefer to set up manually:
    ./setup-mac.sh
    ```
 
+## mise bootstrap (new)
+
+`mise.toml` declares the machine setup, so a new Apple Silicon Mac can be
+brought up with mise instead of the setup script:
+
+```bash
+curl https://mise.run | sh
+export PATH="$HOME/.local/bin:$PATH"
+mise bootstrap --from git@github.com:j4hr3n/dotfiles.git
+```
+
+`mise bootstrap` clones this repo, installs the tools in `[tools]`
+(node, go, uv, bun, pnpm — replacing fnm/asdf), pours the Homebrew packages
+and casks from `[bootstrap.packages]` without installing Homebrew, links the
+shell/ghostty/Claude Code configs from `[dotfiles]`, and runs
+`scripts/bootstrap-task.sh` for the imperative steps (Xcode CLT, git identity,
+oh-my-zsh, Claude Code).
+
+Useful commands:
+
+```bash
+mise bootstrap --dry-run    # preview the plan
+mise bootstrap status       # drift report
+mise bootstrap --yes        # unattended re-apply
+mise dot diff               # config file drift
+```
+
+Notes:
+
+- Intel Macs: mise's brew package manager is Apple Silicon only. Keep using
+  `setup-mac.sh` there.
+- `setup-mac.sh` stays as the fallback until mise bootstrap is validated end
+  to end. mise owns packages, so the `~/Brewfile` symlink is no longer created.
+
 ## What Gets Installed
 
 - **Shell**: zsh with oh-my-zsh, custom aliases, tmux
