@@ -52,11 +52,22 @@ echo
 
 # Load brew on macOS
 if [[ "$OSTYPE" =~ ^darwin ]]; then
-    export PATH="/opt/homebrew/sbin:$PATH"
-    eval $(/opt/homebrew/bin/brew shellenv)
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+    fi
 fi
 
-eval "$(fnm env --use-on-cd --shell zsh)"
+# mise and native installers place executables here.
+export PATH="$HOME/.local/bin:$PATH"
+
+# Dev tools are managed by mise when present; falls back to fnm otherwise.
+if command -v mise &>/dev/null; then
+    eval "$(mise activate zsh)"
+else
+    eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
@@ -64,7 +75,7 @@ eval "$(fnm env --use-on-cd --shell zsh)"
 command -v fzf &>/dev/null && source <(fzf --zsh)
 
 # bun completions
-[ -s "/Users/christofferjahren/.bun/_bun" ] && source "/Users/christofferjahren/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -76,6 +87,3 @@ export PATH="$HOME/bin:$PATH"
 # Add Go bin to PATH (tea, other go-installed CLIs)
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$PATH:$HOME/.jfrog/bin"
-
-# Native installers such as Claude Code place binaries here.
-export PATH="$HOME/.local/bin:$PATH"
