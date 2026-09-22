@@ -1,6 +1,10 @@
 # Machine setup, applied with `mise bootstrap` — https://mise.jdx.dev/bootstrap.html
 #
 # New machine (Apple Silicon Mac):
+#   if ! xcode-select --print-path >/dev/null 2>&1; then
+#     xcode-select --install
+#     until xcode-select --print-path >/dev/null 2>&1; do sleep 5; done
+#   fi
 #   curl https://mise.run | sh
 #   export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.local/bin:$PATH"
 #   mkdir -p "$HOME/dev"

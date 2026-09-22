@@ -3,9 +3,14 @@
 ## Setup
 
 On a new Apple Silicon Mac, `mise.toml` declares the machine setup. Install
+Xcode Command Line Tools first (the repository clone needs `git`), then install
 mise and bootstrap the repository over HTTPS:
 
 ```bash
+if ! xcode-select --print-path >/dev/null 2>&1; then
+  xcode-select --install
+  until xcode-select --print-path >/dev/null 2>&1; do sleep 5; done
+fi
 curl https://mise.run | sh
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.local/bin:$PATH"
 mkdir -p "$HOME/dev"
