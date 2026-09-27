@@ -87,3 +87,21 @@ export PATH="$HOME/bin:$PATH"
 # Add Go bin to PATH (tea, other go-installed CLIs)
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$PATH:$HOME/.jfrog/bin"
+# System .NET SDK installation. Keep user-local global tools available.
+export DOTNET_ROOT="/usr/local/share/dotnet"
+export PATH="$DOTNET_ROOT:$HOME/.dotnet/tools:$PATH"
+
+# Machine-local secrets stay outside the repository.
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+if [[ -n ${GH_PACKAGES_TOKEN:-} ]]; then
+    export NODE_AUTH_TOKEN="$GH_PACKAGES_TOKEN"
+    export NuGetPackageSourceCredentials_github_aidnas="Username=j4hr3n;Password=${GH_PACKAGES_TOKEN}"
+fi
+
+# Trust the locally exported Zscaler CA when present.
+if [[ -f "$HOME/.config/devbox/zscaler-root-ca.pem" ]]; then
+    export NODE_EXTRA_CA_CERTS="$HOME/.config/devbox/zscaler-root-ca.pem"
+fi
+
+# Vite+ bin (https://viteplus.dev)
+[[ -f "$HOME/.vite-plus/env" ]] && source "$HOME/.vite-plus/env"
